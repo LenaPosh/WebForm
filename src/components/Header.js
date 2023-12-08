@@ -33,15 +33,14 @@ const Header = () => {
     const handleSignIn = (e) => {
         e.preventDefault();
         console.log('Вход:', loginData);
-        // Добавьте здесь логику для отправки данных на сервер для аутентификации
+        // логика для отправки данных на сервер для аутентификации
     };
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        // Проверка на совпадение паролей
         if (loginData.password === passwordConfirmation) {
             console.log('Регистрация:', loginData);
-            // Добавьте здесь логику для отправки данных на сервер для регистрации
+            // логика для отправки данных на сервер для регистрации
         } else {
             console.log('Passwords do not match');
         }
@@ -99,7 +98,7 @@ const Header = () => {
                                     value={loginData.password}
                                     onChange={handleInputChange}
                                 />
-                                {isRegistration && (  // Добавлено условие, чтобы инпут был видим только при регистрации
+                                {isRegistration && (
                                     <input
                                         type="password"
                                         name="passwordConfirmation"
