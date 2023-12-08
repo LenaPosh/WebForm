@@ -1,0 +1,49 @@
+
+
+body {
+    background: linear-gradient(90deg, #8A2BE2, #FF69B4);
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    background: linear-gradient(90deg, #856aed, #db5dbe);
+    padding: 20px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 14px 24px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+.menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.menu-link span {
+    margin-right: 10px;
+}
+
+.menu-link-text {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+.menu-link svg {
+    font-size: 1em;
+}
+
+.menu-link.active {
+    background-color: rgba(75, 41, 107, 0.32); /* Пример: полупрозрачный зеленый цвет */
+    color: #fff;
+}
