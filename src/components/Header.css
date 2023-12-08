@@ -1,5 +1,4 @@
-
-
+/* Header.css */
 body {
     background: linear-gradient(90deg, #8A2BE2, #FF69B4);
     margin: 0;
@@ -17,6 +16,7 @@ body {
     text-decoration: none;
     color: #fff;
     display: flex;
+    flex-direction: column;
     align-items: center;
     padding: 14px 24px;
     border-radius: 8px;
@@ -29,18 +29,15 @@ body {
     color: rgba(255, 255, 255, 0.6);
 }
 
-.menu-link span {
-    margin-right: 10px;
-}
-
 .menu-link-text {
     color: #fff;
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
 }
 
-.menu-link svg {
-    font-size: 1em;
+.icon {
+    margin-top: 5px; /* Расстояние между иконкой и текстом */
+    font-size: 1.5em; /* Пример: увеличенный размер иконки */
 }
 
 .menu-link.active {

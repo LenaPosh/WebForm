@@ -3,13 +3,12 @@ import TableClients from '../components/TableClients';
 import Header from "../components/Header";
 
 const ClientsPage = () => {
-    const clientsData = []; // Ваши данные
 
     return (
         <>
             <Header/>
             <div>
-                <TableClients data={clientsData} />
+                <TableClients/>
             </div>
         </>
 
