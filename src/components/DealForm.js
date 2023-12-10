@@ -60,10 +60,10 @@ const DealForm = () => {
         setTotalAmount('');
     };
 
-    const handleSaveDeal = () => {
-
-        console.log('Сохранена сделка:', deals);
-    };
+    // const handleSaveDeal = () => {
+    //
+    //     console.log('Сохранена сделка:', deals);
+    // };
 
     useEffect(() => {
         const commissionValue = parseFloat(commission) || 0;
