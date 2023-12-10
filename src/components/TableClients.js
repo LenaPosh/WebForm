@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataGrid, { Column, Pager, Paging, Editing, Button } from 'devextreme-react/data-grid';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import './TableClients.css';
-
-const initialData = [
-    { key: 1, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 2, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 3, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 4, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 5, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 6, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 7, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 8, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 9, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 10, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 11, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 12, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-    { key: 13, name: "Lena", lastName: "Posh", passportID: 454545454, phoneNumber: 1223555, age: 30 },
-];
-
+import axios from 'axios';
 
 const TableClients = () => {
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://reqres.in/api/users');
+
+                const userData = response.data.data.map((user) => ({
+                    key: user.id,
+                    name: user.first_name,
+                    lastName: user.last_name,
+                    passportID: user.id,
+                    phoneNumber: '',
+                    age: '',
+                    ...user,
+                }));
+                setData(userData);
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     const addRow = () => {
         const newData = [...data, {}];
