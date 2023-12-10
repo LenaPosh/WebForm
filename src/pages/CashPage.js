@@ -3,12 +3,10 @@ import TableCash from '../components/TableCash';
 import Header from "../components/Header";
 
 const CashPage = () => {
-    const cashData = []; // Ваши данные
-
     return (
         <>
             <Header/>
-            <TableCash data={cashData} />
+            <TableCash/>
 
         </>
 

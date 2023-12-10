@@ -1,62 +1,35 @@
-
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import './Header.css';
 import { GoPeople } from 'react-icons/go';
 import { PiHandshakeLight } from 'react-icons/pi';
 import { IoMdCash } from 'react-icons/io';
+import Logo from './logo.png';
+import SignInComponent from "./SignInComponent";
+import { GiCash } from "react-icons/gi";
 
 const Header = () => {
     const [isModalOpen, setModalOpen] = useState(false);
-    const [loginData, setLoginData] = useState({
-        username: '',
-        password: '',
-    });
-    const [isRegistration, setRegistration] = useState(false);
-    const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
-    const handlePasswordConfirmationChange = (e) => {
-        setPasswordConfirmation(e.target.value);
-    };
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setLoginData({
-            ...loginData,
-            [name]: value,
-        });
-    };
-
-    const handleFormToggle = () => {
-        setRegistration(!isRegistration);
-    };
-
-    const handleSignIn = (e) => {
-        e.preventDefault();
-        console.log('Вход:', loginData);
-        // логика для отправки данных на сервер для аутентификации
-    };
-
-    const handleSignUp = (e) => {
-        e.preventDefault();
-        if (loginData.password === passwordConfirmation) {
-            console.log('Регистрация:', loginData);
-            // логика для отправки данных на сервер для регистрации
-        } else {
-            console.log('Passwords do not match');
-        }
-    };
-
-    const openModal = () => {
-        setModalOpen(true);
-    };
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const closeModal = () => {
         setModalOpen(false);
-        setRegistration(false);
+    };
+
+    const handleSignIn = (userData) => {
+        // логика для отправки данных на сервер для аутентификации
+        console.log('Вход:', userData);
+        // После успешной аутентификации
+        setIsAuthenticated(true);
+        // Закрываем модальное окно
+        setModalOpen(false);
     };
 
     return (
         <div className="header">
+            <NavLink to="/">
+                <img className="logo-text" alt="" src={Logo} />
+            </NavLink>
             <NavLink to="/clients" className="menu-link" activeClassName="active">
                 <GoPeople className="icon" />
                 <span className="menu-link-text">Clients</span>
@@ -69,58 +42,22 @@ const Header = () => {
                 <IoMdCash className="icon" />
                 <span className="menu-link-text">Cash</span>
             </NavLink>
-
-            <div className="menu-link sign-in-button" onClick={openModal}>
-                Sign In
-            </div>
+            <NavLink to="/cash" className="menu-link" activeClassName="active">
+                <GiCash className="icon" />
+                <span className="menu-link-text">Balanses</span>
+            </NavLink>
 
             {isModalOpen && (
                 <div className="modal">
                     <div className="modal-content">
-            <span className="close" onClick={closeModal}>
-                &times;
-            </span>
-                        <div className="form-container">
-                            <form onSubmit={isRegistration ? handleSignUp : handleSignIn}>
-                                <input
-                                    type="text"
-                                    name="username"
-                                    placeholder="Username"
-                                    className="form-input"
-                                    value={loginData.username}
-                                    onChange={handleInputChange}
-                                />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    className="form-input"
-                                    value={loginData.password}
-                                    onChange={handleInputChange}
-                                />
-                                {isRegistration && (
-                                    <input
-                                        type="password"
-                                        name="passwordConfirmation"
-                                        placeholder="Confirm Password"
-                                        className="form-input"
-                                        value={passwordConfirmation}
-                                        onChange={handlePasswordConfirmationChange}
-                                    />
-                                )}
-                                <button type="submit" className="form-button">
-                                    {isRegistration ? 'Sign Up' : 'Sign In'}
-                                </button>
-                            </form>
-                            <p className="form-footer">
-                                {isRegistration
-                                    ? 'Already registered? '
-                                    : "Not registered? "}
-                                <span onClick={handleFormToggle}>
-                        {isRegistration ? 'Sign In' : 'Sign Up'}
-                    </span>
-                            </p>
-                        </div>
+                        <span className="close" onClick={closeModal}>
+                            &times;
+                        </span>
+                        {isAuthenticated ? (
+                            <Navigate to="/clients" />
+                        ) : (
+                            <SignInComponent handleSignIn={handleSignIn} />
+                        )}
                     </div>
                 </div>
             )}

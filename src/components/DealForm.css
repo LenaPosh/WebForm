@@ -1,0 +1,70 @@
+.deal-form-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+
+.deals-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.deals-table th, .deals-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.deals-table th {
+    background-color: #f2f2f2;
+}
+
+/* Добавьте следующие стили в ваш файл CSS (DealForm.css) */
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px; /* Добавлен отступ сверху для разделения кнопок от остальных элементов */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}
+
+button:first-child {
+    background-color: #4b296b; /* Зеленый цвет для первой кнопки */
+}
+
+button:last-child {
+    background-color: #5b296b; /* Синий цвет для второй кнопки */
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+
+

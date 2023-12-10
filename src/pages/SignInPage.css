@@ -1,0 +1,26 @@
+/* SignInPage.css */
+.signin-page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.signin-page {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    background-color: rgba(248, 200, 207, 0.28);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: -120px; /* Уменьшите это значение, чтобы поднять форму выше */
+    position: relative;
+    z-index: 1;
+}
+
+.signin-page h2 {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: normal;
+}
