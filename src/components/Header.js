@@ -21,8 +21,6 @@ const Header = () => {
         console.log('Вход:', userData);
         // После успешной аутентификации
         setIsAuthenticated(true);
-        // Закрываем модальное окно
-        setModalOpen(false);
     };
 
     return (
@@ -42,7 +40,7 @@ const Header = () => {
                 <IoMdCash className="icon" />
                 <span className="menu-link-text">Cash</span>
             </NavLink>
-            <NavLink to="/cash" className="menu-link" activeClassName="active">
+            <NavLink to="/balanses" className="menu-link" activeClassName="active">
                 <GiCash className="icon" />
                 <span className="menu-link-text">Balanses</span>
             </NavLink>

@@ -3,6 +3,7 @@ import ClientPage from './pages/ClientsPage';
 import DealsPage from './pages/DealsPage';
 import CashPage from './pages/CashPage';
 import SignInPage from './pages/SignInPage';
+import BalansesPage from "./pages/BalansesPage";
 
 export const router = createBrowserRouter([
     {
@@ -25,5 +26,10 @@ export const router = createBrowserRouter([
         path: '/cash',
         element: <CashPage />,
     },
+    {
+        path: '/balanses',
+        element: <BalansesPage />,
+    },
+
 ]);
 

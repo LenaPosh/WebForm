@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './DealForm.css';
 
 const DealForm = () => {
-    // Состояния для хранения данных формы
     const [client, setClient] = useState('');
     const [currency1, setCurrency1] = useState('');
     const [currency2, setCurrency2] = useState('');
@@ -12,46 +11,36 @@ const DealForm = () => {
     const [isCurrency1Selected, setIsCurrency1Selected] = useState(false);
 
 
-    // Списки для выбора
-    const clientsList = ['Client1', 'Client2', 'Client3']; // Ваши клиенты
-    const currenciesList = ['USD', 'EUR', 'GBP']; // Ваши валюты
+    const clientsList = ['Client1', 'Client2', 'Client3'];
+    const currenciesList = ['USD', 'EUR', 'GBP'];
 
-    // Состояние для хранения данных таблицы
     const [deals, setDeals] = useState([]);
 
-    // Обработчик изменения валюты 1
     const handleCurrency1Change = (e) => {
         const selectedCurrency1 = e.target.value;
         setCurrency1(selectedCurrency1);
 
-        // Если выбрана валюта 1, установите isCurrency1Selected в true, иначе в false
         setIsCurrency1Selected(!!selectedCurrency1);
 
-        // Если валюта 1 не выбрана, сбросьте выбор валюты 2
         if (!selectedCurrency1) {
             setCurrency2('');
         }
     };
 
 
-    // Обработчик изменения валюты 2
     const handleCurrency2Change = (e) => {
         setCurrency2(e.target.value);
     };
 
-    // Обработчик изменения комиссии
     const handleCommissionChange = (e) => {
         setCommission(e.target.value);
     };
 
-    // Обработчик изменения суммы
     const handleAmountChange = (e) => {
         setAmount(e.target.value);
     };
 
-    // Обработчик нажатия кнопки "Добавить"
     const handleAddDeal = () => {
-        // Ваши действия при добавлении сделки
         const newDeal = {
             client,
             currency1,
@@ -61,10 +50,8 @@ const DealForm = () => {
             totalAmount,
         };
 
-        // Добавляем новую сделку к существующему массиву сделок
         setDeals([...deals, newDeal]);
 
-        // Очищаем форму
         setClient('');
         setCurrency1('');
         setCurrency2('');
@@ -73,14 +60,11 @@ const DealForm = () => {
         setTotalAmount('');
     };
 
-    // Обработчик нажатия кнопки "Сохранить"
     const handleSaveDeal = () => {
-        // Ваши действия при сохранении сделки
+
         console.log('Сохранена сделка:', deals);
-        // Дополнительная логика, если нужна
     };
 
-    // Обновление суммы к выдаче при изменении комиссии или суммы
     useEffect(() => {
         const commissionValue = parseFloat(commission) || 0;
         const amountValue = parseFloat(amount) || 0;
@@ -143,7 +127,7 @@ const DealForm = () => {
 
             <div className="buttons-container">
                 <button onClick={handleAddDeal}>Add Deal</button>
-                <button onClick={handleSaveDeal}>Save Deal</button>
+                {/*<button onClick={handleSaveDeal}>Save Deal</button>*/}
             </div>
 
             {/* Таблица для отображения сделок */}

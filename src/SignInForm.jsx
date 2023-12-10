@@ -45,7 +45,6 @@ const SignInForm = ({ handleSignIn }) => {
         }
     };
 
-    // Если пользователь аутентифицирован, перенаправьте его на страницу /clients
     if (isAuthenticated) {
         return <Navigate to="/clients" />;
     }
