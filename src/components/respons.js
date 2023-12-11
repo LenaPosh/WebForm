@@ -10,7 +10,7 @@ const YourComponent = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('https://reqres.in/api/users');
-                console.log('Response from API:', response.data); // Добавлено для отладки
+                console.log('Response from API:', response.data);
                 setData(response.data);
             } catch (error) {
                 console.error('Ошибка запроса:', error.message);
@@ -32,7 +32,7 @@ const YourComponent = () => {
     return (
         <div>
             <p>Данные успешно загружены:</p>
-            <Table userData={data.data} /> {/* Обновлено */}
+            <Table userData={data.data} />
         </div>
     );
 };

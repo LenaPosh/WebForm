@@ -10,6 +10,10 @@ const SignInForm = ({ handleSignIn }) => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    const isPasswordValid = (password) => {
+        return /^(?=.*[0-9]{5,})(?=.*[a-zA-Z]).*$/.test(password);
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setLoginData({
@@ -30,12 +34,12 @@ const SignInForm = ({ handleSignIn }) => {
         e.preventDefault();
         if (isRegistration) {
             // Логика для отправки данных на сервер для регистрации
-            if (loginData.password === passwordConfirmation) {
+            if (loginData.password === passwordConfirmation && isPasswordValid(loginData.password)) {
                 console.log('Регистрация:', loginData);
                 // После успешной регистрации
                 setIsAuthenticated(true);
             } else {
-                console.log('Passwords do not match');
+                console.log('Invalid password or passwords do not match');
             }
         } else {
             // Логика для отправки данных на сервер для аутентификации
@@ -69,14 +73,19 @@ const SignInForm = ({ handleSignIn }) => {
                     onChange={handleInputChange}
                 />
                 {isRegistration && (
-                    <input
-                        type="password"
-                        name="passwordConfirmation"
-                        placeholder="Confirm Password"
-                        className="form-input"
-                        value={passwordConfirmation}
-                        onChange={handlePasswordConfirmationChange}
-                    />
+                    <div>
+                        <input
+                            type="password"
+                            name="passwordConfirmation"
+                            placeholder="Confirm Password"
+                            className="form-input"
+                            value={passwordConfirmation}
+                            onChange={handlePasswordConfirmationChange}
+                        />
+                        {!isPasswordValid(loginData.password) && (
+                            <p style={{ color: 'red' }}>Password must contain at least 5 digits and 1 letter</p>
+                        )}
+                    </div>
                 )}
                 <button type="submit" className="form-button">
                     {isRegistration ? 'Sign Up' : 'Sign In'}

@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
         element: <CashPage />,
     },
     {
-        path: '/balanses',
+        path: '/balanсes',
         element: <BalansesPage />,
     },
 

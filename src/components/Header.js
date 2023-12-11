@@ -27,6 +27,7 @@ const Header = () => {
         <div className="header">
             <NavLink to="/">
                 <img className="logo-text" alt="" src={Logo} />
+                <h2>App....</h2>
             </NavLink>
             <NavLink to="/clients" className="menu-link" activeClassName="active">
                 <GoPeople className="icon" />
@@ -40,9 +41,9 @@ const Header = () => {
                 <IoMdCash className="icon" />
                 <span className="menu-link-text">Cash</span>
             </NavLink>
-            <NavLink to="/balanses" className="menu-link" activeClassName="active">
+            <NavLink to="/balances" className="menu-link" activeClassName="active">
                 <GiCash className="icon" />
-                <span className="menu-link-text">Balanses</span>
+                <span className="menu-link-text">Balances</span>
             </NavLink>
 
             {isModalOpen && (
