@@ -28,19 +28,19 @@ const Header = () => {
             <NavLink to="/">
                 <img className="logo-text" alt="" src={Logo} />
             </NavLink>
-            <NavLink to="/clients" className="menu-link" activeClassName="active">
+            <NavLink to="/clients" className="menu-link" activeClassName="activeclassname">
                 <GoPeople className="icon" />
                 <span className="menu-link-text">Clients</span>
             </NavLink>
-            <NavLink to="/deals" className="menu-link" activeClassName="active">
+            <NavLink to="/deals" className="menu-link" activeClassName="activeclassname">
                 <PiHandshakeLight className="icon" />
                 <span className="menu-link-text">Deals</span>
             </NavLink>
-            <NavLink to="/cash" className="menu-link" activeClassName="active">
+            <NavLink to="/cash" className="menu-link" activeClassName="activeclassname">
                 <IoMdCash className="icon" />
                 <span className="menu-link-text">Cash</span>
             </NavLink>
-            <NavLink to="/balances" className="menu-link" activeClassName="active">
+            <NavLink to="/balances" className="menu-link" activeClassName="activeclassname">
                 <GiCash className="icon" />
                 <span className="menu-link-text">Balances</span>
             </NavLink>

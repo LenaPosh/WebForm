@@ -1,4 +1,3 @@
-// AddClientForm.js
 
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -18,11 +17,14 @@ const AddClientForm = ({ onSave }) => {
 
     const handleSave = async () => {
         try {
-            // Отправка данных нового клиента на сервер
-            await axios.post('http://18.215.164.227:8001/users', formData);
-            // Вызов onSave, чтобы сохранить данные в родительском компоненте, если это необходимо
+            await axios.post('http://18.215.164.227:8001/client', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
             onSave(formData);
-            // Опционально: очистить форму после сохранения
+
             setFormData({
                 name: '',
                 lastName: '',
@@ -33,6 +35,7 @@ const AddClientForm = ({ onSave }) => {
             console.error('Error while saving a new client:', error.message);
         }
     };
+
 
     return (
         <div className="deal-form-container">
