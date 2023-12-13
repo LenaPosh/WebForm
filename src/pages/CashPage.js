@@ -1,8 +1,7 @@
 import React from 'react';
 import Header from "../components/Header";
-import AppClients from "../components/AddClientForm";
-import Table from "../components/NewTable";
-// import AddClientForm from "../components/AddClientForm";
+import CashTable from "../components/CashTable";
+
 
 const CashPage = () => {
     // const onSave = (formData) => {
@@ -12,8 +11,8 @@ const CashPage = () => {
     return (
         <>
             <Header/>
-            <AppClients/>
-            <Table/>
+            <CashTable/>
+
 
             {/*<AddClientForm onSave={onSave} />*/}
         </>

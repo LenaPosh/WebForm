@@ -1,12 +1,16 @@
+
 .client-table {
-    width: 100%;
+    width: 95%;
     border-collapse: collapse;
     margin-top: 20px;
+    margin-left: 40px; /* Отступ слева */
+    margin-right: 20px; /* Отступ справа */
 }
+
 
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 6px;
     text-align: left;
 }
 
@@ -20,7 +24,7 @@ tr:hover {
 }
 
 .delete-button, .edit-button {
-    background-color: #4b296b;
+    background-color: #655277;
     color: white;
     padding: 6px 10px;
     border: none;

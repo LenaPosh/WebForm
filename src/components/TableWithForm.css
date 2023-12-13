@@ -1,0 +1,70 @@
+
+.client-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.client-table th,
+.client-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.client-table th {
+    background-color: #f2f2f2;
+}
+
+.client-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.client-table tr:hover {
+    background-color: #ddd;
+}
+
+.actions-column {
+    text-align: center;
+}
+
+.add-client-button {
+    background-color: #4b296b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.add-client-form {
+    display: none;
+    margin-top: 20px;
+}
+
+.add-client-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.add-client-form input[type="text"],
+.add-client-form input[type="date"],
+.add-client-form input[type="tel"],
+.add-client-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-client-form button {
+    background-color: #4b296b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.add-client-form button.cancel-button {
+    background-color: #ccc;
+}

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './NewTable.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faEdit, faSave} from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
+import AddClientForm from './AddClientForm';
 
-const Table = () => {
+const TableWithForm = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingRowId, setEditingRowId] = useState(null);
+    const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(() => {
         axios.get('http://18.215.164.227:8001/clients')
@@ -28,11 +30,9 @@ const Table = () => {
             });
     }, []);
 
-
     const handleEdit = (id) => {
         setEditingRowId(id);
     };
-
 
     const handleSave = async (id) => {
         const editedItem = data.find(item => item.id === id);
@@ -47,29 +47,6 @@ const Table = () => {
         }
     };
 
-    // const handleSaveChanges = async () => {
-    //     try {
-    //
-    //         for (const newClient of newClients) {
-    //             await axios.post('http://18.215.164.227:8001/client', newClient);
-    //         }
-    //
-    //         setNewClients([]);
-    //
-    //         console.log('Изменения успешно сохранены');
-    //     } catch (error) {
-    //         console.error('Ошибка при сохранении изменений:', error.message);
-    //     }
-    // };
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
     const handleEditChange = (id, field, value) => {
         const updatedData = data.map((item) =>
             item.id === id ? { ...item, [field]: value } : item
@@ -77,10 +54,46 @@ const Table = () => {
         setData(updatedData);
     };
 
+    const handleFormSave = async (formData) => {
+        try {
+            const formattedData = {
+                name: formData.name,
+                last_name: formData.lastName,
+                passportID: formData.passportID,
+                comments: formData.comments,
+                date_added: formData.date,
+                phone: formData.phone
+            };
+
+            const response = await axios.post('http://18.215.164.227:8001/client', formattedData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            setData(prevData => [...prevData, response.data]);
+            console.log('Новый клиент успешно добавлен:', response.data);
+
+            setEditingRowId(null);
+            setIsFormVisible(false);
+        } catch (error) {
+            console.error('Ошибка при сохранении нового клиента:', error.message);
+        }
+    };
+
+    const toggleFormVisibility = () => {
+        setIsFormVisible(!isFormVisible);
+    };
 
     return (
         <div>
-            <table className="client-table" style={{ marginRight: '0px' }}>
+            <div className="add-client-button-container">
+                <button className="add-client-button" onClick={toggleFormVisibility}>
+                    {isFormVisible ? 'Cancel' : 'Add Client'}
+                </button>
+            </div>
+            {isFormVisible && <AddClientForm onSave={handleFormSave} />}
+            <table className="client-table">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -89,8 +102,7 @@ const Table = () => {
                     <th>Date Added</th>
                     <th>Phone</th>
                     <th>Comments</th>
-                    <th style={{ padding: '5px' }}>Actions</th>
-
+                    <th className="actions-column">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -163,13 +175,12 @@ const Table = () => {
                                     item.comments
                                 )}
                             </td>
-                            <td>
+                            <td className="actions-column">
                                 {editingRowId === item.id ? (
                                     <button onClick={() => handleSave(item.id)}><FontAwesomeIcon icon={faSave} /></button>
                                 ) : (
                                     <button onClick={() => handleEdit(item.id)}><FontAwesomeIcon icon={faEdit} /></button>
                                 )}
-
                             </td>
                         </tr>
                     ))
@@ -180,13 +191,11 @@ const Table = () => {
                 )}
                 </tbody>
             </table>
-
-            {/*/!* Кнопка для сохранения изменений *!/*/}
-            {/*<button onClick={handleSaveChanges}>Save Changes</button>*/}
         </div>
     );
 };
 
-export default Table;
+export default TableWithForm;
+
 
 

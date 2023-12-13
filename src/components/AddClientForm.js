@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddClientForm.css'
 
 const AddClientForm = ({ onSave }) => {
     const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const AddClientForm = ({ onSave }) => {
     };
 
     return (
-        <div className="deal-form-container">
+        <div className="deal-form-container-2">
             <label>
                 Name:
                 <input type="text" name="name" value={formData.name} onChange={handleChange} />
@@ -78,7 +79,7 @@ const AddClientForm = ({ onSave }) => {
                 Comments:
                 <textarea name="comments" value={formData.comments} onChange={handleChange} />
             </label>
-            <div className="buttons-container">
+            <div className="buttons-container-2">
                 <button onClick={handleSave} style={{ backgroundColor: '#4b296b' }}>
                     Save
                 </button>
@@ -88,7 +89,7 @@ const AddClientForm = ({ onSave }) => {
 };
 
 const AddClientButton = ({ onAddClick }) => (
-    <button onClick={onAddClick} style={{ backgroundColor: '#4b296b', color: 'white', margin: '20px', marginLeft: '20px',   }}>
+    <button onClick={onAddClick} className="add-client-button-2">
         Add Client
     </button>
 );
@@ -102,7 +103,6 @@ const AppClients = () => {
 
     const handleFormSave = async (formData) => {
         try {
-            // Логика сохранения данных на сервере (вы можете использовать ваш код сохранения)
 
             console.log('Форма успешно сохранена:', formData);
 

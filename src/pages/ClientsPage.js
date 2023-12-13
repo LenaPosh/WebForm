@@ -1,7 +1,10 @@
 import React from 'react';
-import TableClients from '../components/TableClients';
 import Header from "../components/Header";
 import AppClients from "../components/AddClientForm";
+import Table from "../components/NewTable";
+// import AppClients from "../components/AddClientForm";
+// import Table from "../components/NewTable";
+
 
 const ClientsPage = () => {
 
@@ -9,10 +12,8 @@ const ClientsPage = () => {
         <>
             <Header/>
             <AppClients/>
-
-            <div>
-                <TableClients/>
-            </div>
+            <Table/>
+            {/*<TableWithForm/>*/}
         </>
 
     );

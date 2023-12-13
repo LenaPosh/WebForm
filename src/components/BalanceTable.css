@@ -1,9 +1,11 @@
-
 .table-container-balance {
     max-width: 800px;
     margin: 20px auto;
     overflow-x: auto;
     font-family: Arial, sans-serif;
+    background-color: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый фон */
+    padding: 20px; /* Добавляем отступы для контейнера */
+    border-radius: 10px; /* Добавляем скругление углов */
 }
 
 table {
@@ -19,15 +21,15 @@ th, td {
 }
 
 th {
-    background-color: #f2f2f2;
-    color: black; /* Цвет текста заголовков */
+    background-color: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый фон для заголовков */
+    color: rgba(0, 0, 0, 0.93);
 }
 
-tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
+tbody tr {
+    background-color: #f1f1f1;
 }
 
 tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: rgba(245, 209, 242, 0.76);
 }
 

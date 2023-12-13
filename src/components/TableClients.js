@@ -14,6 +14,8 @@ const TableClients = () => {
     const [editingRowId, setEditingRowId] = useState(null);
     const dataGridRef = useRef(null);
 
+    const [updatedClients, setUpdatedClients] = useState([]);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -26,7 +28,7 @@ const TableClients = () => {
                     id: user.id,
                     name: user.name,
                     last_name: user.last_name,
-                    passportID: user.document,
+                    document: user.document,
                     comments: user.comments,
                     dateAdded: user.date_added,
                     phone: user.phone,
@@ -62,38 +64,32 @@ const TableClients = () => {
         }
     };
 
-    const saveNewClient = async (newClient) => {
-        try {
-            const response = await axios.post('http://18.215.164.227:8001/client', newClient);
-            console.log('Ответ от сервера:', response);
-
-            fetchData();
-
-            // Обновите состояние новых клиентов
-            setNewClients((prevClients) => [...prevClients, response.data]);
-
-            if (dataGridRef.current && dataGridRef.current.instance) {
-                dataGridRef.current.instance.repaint();
-            }
-        } catch (error) {
-            console.error('Ошибка при сохранении нового клиента:', error.message);
-            console.error('Ошибка в ответе сервера:', error.response?.data);
-        }
-    };
+    // const saveNewClient = async (newClient) => {
+    //     try {
+    //         const response = await axios.post('http://18.215.164.227:8001/client', newClient);
+    //         console.log('Ответ от сервера:', response);
+    //
+    //         fetchData();
+    //
+    //         // Обновите состояние новых клиентов
+    //         setNewClients((prevClients) => [...prevClients, response.data]);
+    //
+    //         if (dataGridRef.current && dataGridRef.current.instance) {
+    //             dataGridRef.current.instance.repaint();
+    //         }
+    //     } catch (error) {
+    //         console.error('Ошибка при сохранении нового клиента:', error.message);
+    //         console.error('Ошибка в ответе сервера:', error.response?.data);
+    //     }
+    // };
 
     const handleSaveChanges = async () => {
+        console.log("Сохранение изменений:", updatedClients);
         try {
-            if (dataGridRef.current && dataGridRef.current.instance) {
-                await dataGridRef.current.instance.saveEditData();
+            for (const client of updatedClients) {
+                await axios.put(`http://18.215.164.227:8001/client/${client.id}`, client);
             }
-
-                for (const newClient of newClients) {
-                    await saveNewClient(newClient);
-                }
-
-                setNewClients([]);
-
-                console.log('Изменения успешно сохранены');
+            setUpdatedClients([]);
             fetchData();
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error.message);
@@ -117,16 +113,19 @@ const TableClients = () => {
         },
     ];
 
-    const handleRowUpdate = async (e) => {
-        try {
-            const updatedData = e.data;
+    const handleRowUpdate = (e) => {
+        const updatedData = e.data;
 
-            await axios.put(`http://18.215.164.227:8001/client/${updatedData.id}`, updatedData);
-
-            fetchData();
-        } catch (error) {
-            console.error('Ошибка при обновлении данных:', error.message);
-        }
+        setUpdatedClients(prev => {
+            const existingClientIndex = prev.findIndex(client => client.id === updatedData.id);
+            if (existingClientIndex > -1) {
+                const newClients = [...prev];
+                newClients[existingClientIndex] = updatedData;
+                return newClients;
+            } else {
+                return [...prev, updatedData];
+            }
+        });
     };
 
     return (
@@ -151,7 +150,7 @@ const TableClients = () => {
                 />
                 <Column dataField="name" caption="Name" />
                 <Column dataField="last_name" caption="Last Name" />
-                <Column dataField="passportID" caption="Passport ID" />
+                <Column dataField="document" caption="Passport ID" />
                 <Column dataField="dateAdded" caption="Date Added" dataType="date" />
                 <Column dataField="phone" caption="Phone" />
                 <Column dataField="comments" caption="Comments" />
@@ -164,8 +163,9 @@ const TableClients = () => {
             <div style={{ marginTop: '10px' }}>
                 <Button
                     text="Save Changes"
-                    onClick={handleSaveChanges} style={{ backgroundColor: '#4b296b', color: 'white', margin: '10px' }}
+                    onClick={() => handleSaveChanges()} style={{ backgroundColor: '#4b296b', color: 'white', margin: '10px' }}
                 />
+
             </div>
         </div>
     );
