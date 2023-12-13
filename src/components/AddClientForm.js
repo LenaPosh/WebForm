@@ -7,7 +7,9 @@ const AddClientForm = ({ onSave }) => {
         name: '',
         lastName: '',
         passportID: '',
-        comments: ''
+        comments: '',
+        date: '',
+        phone: ''
     });
 
     const handleChange = (e) => {
@@ -22,7 +24,10 @@ const AddClientForm = ({ onSave }) => {
                 last_name: formData.lastName,
                 passportID: formData.passportID,
                 comments: formData.comments,
+                date_added: formData.date,
+                phone: formData.phone
             };
+
 
             await axios.post('http://18.215.164.227:8001/client', formattedData, {
                 headers: {
@@ -37,6 +42,8 @@ const AddClientForm = ({ onSave }) => {
                 lastName: '',
                 passportID: '',
                 comments: '',
+                date: '',
+                phone: ''
             });
 
             console.log('Попытка сохранить нового клиента:', formData);
@@ -60,6 +67,14 @@ const AddClientForm = ({ onSave }) => {
                 <input type="text" name="passportID" value={formData.passportID} onChange={handleChange} />
             </label>
             <label>
+                Date:
+                <input type="date" name="date" value={formData.date} onChange={handleChange} />
+            </label>
+            <label>
+                Phone:
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+            </label>
+            <label>
                 Comments:
                 <textarea name="comments" value={formData.comments} onChange={handleChange} />
             </label>
@@ -73,7 +88,7 @@ const AddClientForm = ({ onSave }) => {
 };
 
 const AddClientButton = ({ onAddClick }) => (
-    <button onClick={onAddClick} style={{ backgroundColor: '#4b296b', color: 'white', margin: '10px' }}>
+    <button onClick={onAddClick} style={{ backgroundColor: '#4b296b', color: 'white', margin: '20px', marginLeft: '20px',   }}>
         Add Client
     </button>
 );
