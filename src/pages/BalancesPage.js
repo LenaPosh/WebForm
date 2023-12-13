@@ -1,14 +1,16 @@
 import React from 'react';
 import Header from "../components/Header";
+import BalanceTable from "../components/BalanceTable";
 
-const BalansesPage = () => {
+const BalancesPage = () => {
     return (
         <>
             <Header/>
+            <BalanceTable/>
 
         </>
 
     );
 };
 
-export default BalansesPage;
+export default BalancesPage;

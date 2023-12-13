@@ -149,19 +149,19 @@
 //
 // export default TableClients;
 
-
-
-//
-//
-import React, {useState, useEffect, useRef} from 'react';
-import DataGrid, { Column, Pager, Paging, Editing, Button } from 'devextreme-react/data-grid';
+import React, { useState, useEffect, useRef } from 'react';
+import DataGrid, { Column, Pager, Paging, Editing } from 'devextreme-react/data-grid';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
+import 'devextreme/dist/css/dx.material.blue.light.css';
 import './TableClients.css';
 import axios from 'axios';
+import { Button } from 'devextreme-react';
 
 const TableClients = () => {
     const [data, setData] = useState([]);
+    const [newClients, setNewClients] = useState([]); // Новые клиенты, добавленные в режиме batch
+    const [editingRowId, setEditingRowId] = useState(null);
     const dataGridRef = useRef(null);
 
     useEffect(() => {
@@ -178,6 +178,8 @@ const TableClients = () => {
                     last_name: user.last_name,
                     passportID: user.document,
                     comments: user.comments,
+                    dateAdded: user.date_added,
+                    phone: user.phone,
                 }));
                 setData(userData);
             } else {
@@ -193,37 +195,80 @@ const TableClients = () => {
 
         const intervalId = setInterval(() => {
             fetchData();
-        }, 30000);
+        }, 40000);
 
         return () => {
             clearInterval(intervalId);
         };
     }, []);
 
-
-    const deleteRow = (id) => {
-        const newData = data.filter((item) => item.id !== id);
-        setData(newData);
+    const deleteRow = async (id) => {
+        try {
+            await axios.delete(`http://18.215.164.227:8001/client/${id}`);
+            const newData = data.filter((item) => item.id !== id);
+            setData(newData);
+        } catch (error) {
+            console.error('Ошибка при удалении клиента:', error.message);
+        }
     };
 
     const saveNewClient = async (newClient) => {
-        debugger;
-        console.log('Попытка сохранить нового клиента:', newClient);
-
         try {
-            const response = await axios.post('http://localhost:8080/http://18.215.164.227:8001/client', newClient);
+            const response = await axios.post('http://18.215.164.227:8001/client', newClient);
             console.log('Ответ от сервера:', response);
+
+            // Обновите данные в таблице после успешного сохранения
+            fetchData();
+
+            // Обновите состояние новых клиентов
+            setNewClients((prevClients) => [...prevClients, response.data]);
 
             if (dataGridRef.current && dataGridRef.current.instance) {
                 dataGridRef.current.instance.repaint();
             }
-
-            fetchData();
         } catch (error) {
             console.error('Ошибка при сохранении нового клиента:', error.message);
             console.error('Ошибка в ответе сервера:', error.response?.data);
         }
     };
+
+    const handleSaveChanges = async () => {
+        try {
+            if (dataGridRef.current && dataGridRef.current.instance) {
+                // Сохраняем изменения в режиме batch
+                await dataGridRef.current.instance.saveEditData();
+
+                // Сохраняем новых клиентов
+                for (const newClient of newClients) {
+                    await saveNewClient(newClient);
+                }
+
+                // Очищаем список новых клиентов
+                setNewClients([]);
+
+                console.log('Изменения успешно сохранены');
+            }
+        } catch (error) {
+            console.error('Ошибка при сохранении изменений:', error.message);
+        }
+    };
+
+    const handleEdit = (id) => {
+        setEditingRowId(id);
+    };
+
+    const buttons = [
+        {
+            name: 'edit',
+            icon: 'edit',
+            onClick: (e) => handleEdit(e.row.data.id),
+        },
+        {
+            name: 'delete',
+            icon: 'trash',
+            onClick: (e) => deleteRow(e.row.data.id),
+        },
+    ];
 
     return (
         <div className="table-container" style={{ margin: '20px', marginTop: '30px' }}>
@@ -239,30 +284,29 @@ const TableClients = () => {
                     allowDeleting={true}
                     allowUpdating={true}
                     texts={{ confirmDeleteMessage: '' }}
+                    useIcons={true}
                     onRowInserted={(e) => {
-                        console.log('Row inserted:', e.data);
-                        saveNewClient(e.data);
+                        // Добавляем нового клиента при добавлении строки
+                        setNewClients((prevClients) => [...prevClients, e.data]);
                     }}
                 />
                 <Column dataField="name" caption="Name" />
                 <Column dataField="last_name" caption="Last Name" />
                 <Column dataField="passportID" caption="Passport ID" />
+                <Column dataField="dateAdded" caption="Date Added" dataType="date" />
+                <Column dataField="phone" caption="Phone" />
                 <Column dataField="comments" caption="Comments" />
+
+                <Column type="buttons" width={110} buttons={buttons} />
                 <Pager allowedPageSizes={[10, 20, 30]} />
                 <Paging defaultPageSize={10} />
             </DataGrid>
 
+            {/* Добавьте кнопку для сохранения изменений */}
             <div style={{ marginTop: '10px' }}>
                 <Button
-                    text="Add Row"
-                    onClick={() => {
-                        console.log('Add Row button clicked');
-                        saveNewClient({});
-                    }}
-                />
-                <Button
-                    text="Delete Row"
-                    onClick={() => deleteRow(data[data.length - 1]?.id)}
+                    text="Save Changes"
+                    onClick={handleSaveChanges}
                 />
             </div>
         </div>
@@ -270,5 +314,6 @@ const TableClients = () => {
 };
 
 export default TableClients;
+
 
 
