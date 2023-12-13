@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -7,7 +6,7 @@ const AddClientForm = ({ onSave }) => {
         name: '',
         lastName: '',
         passportID: '',
-        comments: '',
+        comments: ''
     });
 
     const handleChange = (e) => {
@@ -17,7 +16,14 @@ const AddClientForm = ({ onSave }) => {
 
     const handleSave = async () => {
         try {
-            await axios.post('http://18.215.164.227:8001/client', formData, {
+            const formattedData = {
+                name: formData.name,
+                last_name: formData.lastName,
+                passportID: formData.passportID,
+                comments: formData.comments,
+            };
+
+            await axios.post('http://18.215.164.227:8001/client', formattedData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -31,11 +37,12 @@ const AddClientForm = ({ onSave }) => {
                 passportID: '',
                 comments: '',
             });
+
+            console.log('Попытка сохранить нового клиента:', formData);
         } catch (error) {
             console.error('Error while saving a new client:', error.message);
         }
     };
-
 
     return (
         <div className="deal-form-container">
@@ -65,4 +72,5 @@ const AddClientForm = ({ onSave }) => {
 };
 
 export default AddClientForm;
+
 

@@ -1,19 +1,18 @@
 import React from 'react';
-import TableCash from '../components/TableCash';
 import Header from "../components/Header";
 import AddClientForm from "../components/AddClientForm";
-// import YourComponent from "../components/respons";
 
 const CashPage = () => {
+    const onSave = (formData) => {
+        console.log('Данные сохранены:', formData);
+    };
+
     return (
         <>
             <Header/>
-            <TableCash/>
-            {/*<YourComponent/>*/}
-            <AddClientForm/>
 
+            <AddClientForm onSave={onSave} />
         </>
-
     );
 };
 

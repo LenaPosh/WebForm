@@ -71,3 +71,9 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
+
+.dx-datagrid-rowsview tbody .dx-row:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
