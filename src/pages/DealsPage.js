@@ -1,5 +1,7 @@
 import React from 'react';
 import Header from "../components/Header";
+
+
 import DealForm from "../components/DealForm";
 
 const DealsPage = () => {
@@ -8,6 +10,7 @@ const DealsPage = () => {
         <>
             <Header/>
             <DealForm/>
+/
         </>
     );
 };

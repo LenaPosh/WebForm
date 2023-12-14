@@ -28,10 +28,9 @@ const CashTable = () => {
         setLoading(true);
         axios.get('http://18.215.164.227:8001/cash_transactions')
             .then(response => {
-                // Сортировка данных по дате (исходный формат)
+
                 const sortedData = response.data.data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                // Форматирование отсортированных данных
                 const formattedData = sortedData.map(item => ({
                     ...item,
                     date: formatDate(item.date)
