@@ -2,9 +2,9 @@
 .client-table {
     width: 95%;
     border-collapse: collapse;
-    margin-top: 20px;
-    margin-left: 40px; /* Отступ слева */
-    margin-right: 20px; /* Отступ справа */
+    margin-top: 2px;
+    margin-left: 40px;
+    margin-right: 20px;
 }
 
 
@@ -37,3 +37,9 @@ tr:hover {
     background-color: #632f85;
 }
 
+.search-input {
+    width: 20%;
+    padding: 5px;
+    margin-left: 40px;
+    margin-top: 10px;
+}

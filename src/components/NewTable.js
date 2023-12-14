@@ -11,6 +11,21 @@ const Table = () => {
     const [editingRowId, setEditingRowId] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+    };
+
+     const filteredData = searchQuery
+        ? data.filter(item =>
+            item.name.toLowerCase().includes(searchQuery) ||
+            item.last_name.toLowerCase().includes(searchQuery) ||
+            // Другие поля для поиска
+            item.document.toLowerCase().includes(searchQuery)
+        )
+        : data;
+
     const handleEdit = (id) => {
         setEditingRowId(id);
         setIsEditing(true);
@@ -81,6 +96,14 @@ const Table = () => {
 
     return (
         <div>
+            <input
+                className="search-input"
+                type="text"
+                placeholder="Search by client..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                style={{ marginBottom: '10px' }}
+            />
             <table className="client-table" style={{ marginRight: '0px' }}>
                 <thead>
                 <tr>
@@ -95,8 +118,8 @@ const Table = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {Array.isArray(data) && data.length > 0 ? (
-                    data.map(item => (
+                {Array.isArray(filteredData) && filteredData.length > 0 ? (
+                    filteredData.map(item => (
                         <tr key={item.id}>
                             <td>
                                 {editingRowId === item.id ? (
