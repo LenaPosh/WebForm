@@ -13,8 +13,31 @@ const AddClientForm = ({ onSave }) => {
         phone: ''
     });
 
+    const [formErrors, setFormErrors] = useState({
+        name: '',
+        lastName: '',
+        phone: ''
+    });
+
+    const textPattern = /^[A-Za-zА-Яа-яЁё ]+$/;
+    const phonePattern = /^[0-9]+$/;
+
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        let error = '';
+        if (name === 'name' || name === 'lastName') {
+            if (!textPattern.test(value)) {
+                error = 'Only letters are allowed';
+            }
+        } else if (name === 'phone') {
+            if (!phonePattern.test(value) && value !== '') {
+                error = 'Phone must contain only numbers';
+            }
+        }
+
+        setFormErrors({ ...formErrors, [name]: error });
+
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
@@ -53,15 +76,18 @@ const AddClientForm = ({ onSave }) => {
         }
     };
 
+
     return (
         <div className="deal-form-container-2">
             <label>
                 Name:
                 <input type="text" name="name" value={formData.name} onChange={handleChange} />
+                {formErrors.name && <p className="error-message">{formErrors.name}</p>}
             </label>
             <label>
                 Last Name:
                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+                {formErrors.lastName && <p className="error-message">{formErrors.lastName}</p>}
             </label>
             <label>
                 Passport ID:
@@ -74,6 +100,7 @@ const AddClientForm = ({ onSave }) => {
             <label>
                 Phone:
                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
+                {formErrors.phone && <p className="error-message">{formErrors.phone}</p>}
             </label>
             <label>
                 Comments:
@@ -103,28 +130,33 @@ const AppClients = () => {
 
     const handleFormSave = async (formData) => {
         try {
-
             console.log('Форма успешно сохранена:', formData);
-
-            // После успешного сохранения скрываем форму
             setIsFormVisible(false);
         } catch (error) {
             console.error('Ошибка при сохранении формы:', error.message);
         }
     };
 
+    const closeModal = () => {
+        setIsFormVisible(false);
+    };
+
     return (
         <div>
-            {isFormVisible ? (
-                <AddClientForm onSave={handleFormSave} />
-            ) : (
-                <AddClientButton onAddClick={handleAddClick} />
+            <AddClientButton onAddClick={handleAddClick} />
+            {isFormVisible && (
+                <div className="modal active" onClick={closeModal}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <AddClientForm onSave={handleFormSave} />
+                    </div>
+                </div>
             )}
         </div>
     );
 };
 
 export default AppClients;
+
 //
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';

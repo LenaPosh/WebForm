@@ -9,32 +9,15 @@ const Table = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingRowId, setEditingRowId] = useState(null);
-
-    useEffect(() => {
-        axios.get('http://18.215.164.227:8001/clients')
-            .then(response => {
-                console.log('Data from server:', response.data.data);
-                const formattedData = response.data.data.map(item => ({
-                    ...item,
-                    document: item.document,
-                }));
-                setData(formattedData);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setError(error.message);
-                setLoading(false);
-            });
-    }, []);
-
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleEdit = (id) => {
         setEditingRowId(id);
+        setIsEditing(true);
     };
 
-
     const handleSave = async (id) => {
+        setIsEditing(false);
         const editedItem = data.find(item => item.id === id);
         if (!editedItem) return;
 
@@ -47,20 +30,38 @@ const Table = () => {
         }
     };
 
-    // const handleSaveChanges = async () => {
-    //     try {
-    //
-    //         for (const newClient of newClients) {
-    //             await axios.post('http://18.215.164.227:8001/client', newClient);
-    //         }
-    //
-    //         setNewClients([]);
-    //
-    //         console.log('Изменения успешно сохранены');
-    //     } catch (error) {
-    //         console.error('Ошибка при сохранении изменений:', error.message);
-    //     }
-    // };
+    useEffect(() => {
+        const fetchData = () => {
+            axios.get('http://18.215.164.227:8001/clients')
+                .then(response => {
+                    console.log('Data from server:', response.data); // Для отладки
+                    const formattedData = response.data.data.map(item => ({
+                        ...item,
+                        document: item.document,
+                    }));
+                    setData(formattedData);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    setError(error.message);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        };
+
+        fetchData();
+        let intervalId;
+        if (!isEditing) {
+            intervalId = setInterval(fetchData, 2000);
+        }
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [isEditing]);
+
+
 
     if (loading) {
         return <p>Loading...</p>;
@@ -76,7 +77,7 @@ const Table = () => {
         );
         setData(updatedData);
     };
-
+    const textPattern = "^[A-Za-zА-Яа-яЁё ]+$";
 
     return (
         <div>
@@ -102,6 +103,7 @@ const Table = () => {
                                     <input
                                         type="text"
                                         value={item.name}
+                                        pattern={textPattern}
                                         onChange={(e) => handleEditChange(item.id, 'name', e.target.value)}
                                     />
                                 ) : (
@@ -113,6 +115,7 @@ const Table = () => {
                                     <input
                                         type="text"
                                         value={item.last_name}
+                                        pattern={textPattern}
                                         onChange={(e) => handleEditChange(item.id, 'last_name', e.target.value)}
                                     />
                                 ) : (
@@ -144,8 +147,9 @@ const Table = () => {
                             <td>
                                 {editingRowId === item.id ? (
                                     <input
-                                        type="text"
+                                        type="tel"
                                         value={item.phone}
+                                        pattern="[0-9]*"
                                         onChange={(e) => handleEditChange(item.id, 'phone', e.target.value)}
                                     />
                                 ) : (
@@ -181,9 +185,7 @@ const Table = () => {
                 </tbody>
             </table>
 
-            {/*/!* Кнопка для сохранения изменений *!/*/}
-            {/*<button onClick={handleSaveChanges}>Save Changes</button>*/}
-        </div>
+г        </div>
     );
 };
 
