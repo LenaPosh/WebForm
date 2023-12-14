@@ -28,7 +28,11 @@ const CashTable = () => {
         setLoading(true);
         axios.get('http://18.215.164.227:8001/cash_transactions')
             .then(response => {
-                const formattedData = response.data.data.map(item => ({
+                // Сортировка данных по дате (исходный формат)
+                const sortedData = response.data.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Форматирование отсортированных данных
+                const formattedData = sortedData.map(item => ({
                     ...item,
                     date: formatDate(item.date)
                 }));
@@ -41,6 +45,8 @@ const CashTable = () => {
                 setLoading(false);
             });
     };
+
+
 
     useEffect(() => {
         fetchData();
@@ -70,7 +76,7 @@ const CashTable = () => {
             currencies_id: formData.get('currencyId'),
             directions_id: formData.get('directionId'),
             amount: formData.get('amount'),
-            comments: 'comments'
+            comments: formData.get('comments')
         };
 
         console.log('Отправка данных на сервер:', data);
@@ -99,9 +105,6 @@ const CashTable = () => {
     }
 
 
-
-
-
     return (
         <div className="table-container-balance">
             <button onClick={() => setShowForm(true)}>Add</button>
@@ -113,6 +116,7 @@ const CashTable = () => {
                     <th>Currency ID</th>
                     <th>Direction ID</th>
                     <th>Amount</th>
+                    <th>Сomments</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -123,6 +127,7 @@ const CashTable = () => {
                         <td>{item.short_name}</td>
                         <td>{item.direction}</td>
                         <td>{item.amount}</td>
+                        <td>{item.comments}</td>
                     </tr>
                 ))}
                 </tbody>
@@ -159,6 +164,10 @@ const CashTable = () => {
                             <label htmlFor="amount">Amount:</label>
                             <input type="number" name="amount" id="amount" required />
                         </div>
+                            <div>
+                                <label htmlFor="comments">Сomments:</label>
+                                <input name="comments" id="comments" required />
+                            </div>
                         <button type="submit" style={{backgroundColor: '#5b296b',marginRight: '10px'}}>Send</button>
                         <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
                     </form>

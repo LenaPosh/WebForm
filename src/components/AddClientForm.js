@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AddClientForm.css'
 
-const AddClientForm = ({ onSave }) => {
+const AddClientForm = ({ onSave, onCancel }) => {
     const [formData, setFormData] = useState({
         name: '',
         lastName: '',
@@ -107,8 +107,11 @@ const AddClientForm = ({ onSave }) => {
                 <textarea name="comments" value={formData.comments} onChange={handleChange} />
             </label>
             <div className="buttons-container-2">
-                <button onClick={handleSave} style={{ backgroundColor: '#4b296b' }}>
+                <button onClick={handleSave} style={{ backgroundColor: '#4b296b', marginRight: '10px', padding: '10px 20px' }}>
                     Save
+                </button>
+                <button onClick={onCancel} style={{ backgroundColor: '#4b296b' }}>
+                    Cancel
                 </button>
             </div>
         </div>
@@ -147,7 +150,7 @@ const AppClients = () => {
             {isFormVisible && (
                 <div className="modal active" onClick={closeModal}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <AddClientForm onSave={handleFormSave} />
+                        <AddClientForm onSave={handleFormSave} onCancel={closeModal} />
                     </div>
                 </div>
             )}
