@@ -40,7 +40,7 @@ input {
 select:focus,
 input:focus {
     outline: none;
-    border-color: #4b296b;
+    border-color: #5b296b;
 }
 
 .deals-table {
@@ -77,11 +77,11 @@ button {
 }
 
 button:first-child {
-    background-color: #4b296b;
+    background-color: #5b296b;
 }
 
 button:first-child:hover {
-    background-color: #3c2252;
+    background-color: #7b0b9f;
 }
 
 button:last-child {
@@ -89,5 +89,16 @@ button:last-child {
 }
 
 button:last-child:hover {
-    background-color: #4c2252;
+    background-color: #7b0b9f;
+}
+
+.custom-select .css-13cymwt-control {
+    width: calc(100% - 16px);
+    font-family: 'Arial', sans-serif;
+    font-weight: normal !important;
+    font-size: 14px;
+}
+
+.custom-select__menu {
+    font-weight: normal;
 }

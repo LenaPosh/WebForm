@@ -11,7 +11,7 @@ const DealForm = () => {
     const [commission, setCommission] = useState('');
     const [amount, setAmount] = useState('');
     const [totalAmount, setTotalAmount] = useState('');
-    const [isCurrency1Selected, setIsCurrency1Selected] = useState(false);
+    // const [isCurrency1Selected, setIsCurrency1Selected] = useState(false);
 
     const [clients, setClients] = useState([]);
     const [currencies, setCurrencies] = useState([]);
@@ -23,9 +23,12 @@ const DealForm = () => {
     const [rateFee, setRateFee] = useState('');
 
     const [operators, setOperators] = useState([]); // Состояние для хранения списка операторов (пользователей)
-    const [selectedOperator, setSelectedOperator] = useState('');
+    const [selectedOperator, setSelectedOperator] = useState(null);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const [selectedCurrency1, setSelectedCurrency1] = useState(null);
+    const [selectedCurrency2, setSelectedCurrency2] = useState(null);
 
     useEffect(() => {
         axios.get('http://18.215.164.227:8001/clients')
@@ -45,20 +48,20 @@ const DealForm = () => {
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Error fetching operators:', error));
     }, []);
-    const handleCurrency1Change = (e) => {
-        const selectedCurrency1 = e.target.value;
-        setCurrency1(selectedCurrency1);
 
-        setIsCurrency1Selected(!!selectedCurrency1);
 
-        if (!selectedCurrency1) {
-            setCurrency2('');
-        }
+    const handleCurrency1Change = (selectedOption) => {
+        const currencyId = selectedOption ? selectedOption.value : null;
+        setCurrency1(currencyId);
+        setSelectedCurrency1(selectedOption);
     };
 
-    const handleCurrency2Change = (e) => {
-        setCurrency2(e.target.value);
+    const handleCurrency2Change = (selectedOption) => {
+        const currencyId = selectedOption ? selectedOption.value : null;
+        setCurrency2(currencyId);
+        setSelectedCurrency2(selectedOption);
     };
+
 
     const handleCommissionChange = (e) => {
         setCommission(e.target.value);
@@ -86,8 +89,8 @@ const DealForm = () => {
         setRateFee(e.target.value);
     };
 
-    const handleOperatorChange = (e) => {
-        setSelectedOperator(e.target.value);
+    const handleOperatorChange = (selectedOption) => {
+        setSelectedOperator(selectedOption);
     };
 
     const handleClientChange = (selectedOption) => {
@@ -104,11 +107,14 @@ const DealForm = () => {
 
     const handleAddDeal = () => {
         if (client) {
-            const clientID = client.value.id;
+            const clientID = client ? client.value.id : null;
             if (clientID !== undefined) {
             } else {
                 console.error('Client not found');
             }
+
+            const operatorID = selectedOperator ? selectedOperator.value : null;
+
             const currencyInId = currencies.find(c => c.short_name === currency1)?.id;
             const currencyOutId = currencies.find(c => c.short_name === currency2)?.id;
 
@@ -116,7 +122,7 @@ const DealForm = () => {
             const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')} ${String(currentDate.getHours()).padStart(2, '0')}:${String(currentDate.getMinutes()).padStart(2, '0')}:${String(currentDate.getSeconds()).padStart(2, '0')}`;
 
             const newDeal = {
-                users_id: selectedOperator,
+                users_id: operatorID,
                 clients_id: clientID,
                 date_deal: formattedDate,
                 currencyin: currencyInId,
@@ -129,6 +135,8 @@ const DealForm = () => {
                 profit: profit,
                 comments: comment,
             };
+
+            console.log('Данные для отправки на сервер:', newDeal);
 
             axios.post('http://18.215.164.227:8001/deal', newDeal, {
                 headers: {
@@ -147,8 +155,8 @@ const DealForm = () => {
 
         setDate('');
         setClient('');
-        setCurrency1('');
-        setCurrency2('');
+        setSelectedCurrency1(null);
+        setSelectedCurrency2(null);
         setCommission('');
         setAmount('');
         setTotalAmount('');
@@ -172,7 +180,22 @@ const DealForm = () => {
             <button onClick={handleOpenModal}>Add Deal</button>
             <div className={`modal-cash ${isModalVisible ? 'active' : ''}`}>
                 <div className="modal-content-cash" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                    {/* Кнопка для закрытия модального окна */}
+                    <style>
+                        {`
+                        .modal-content-cash::-webkit-scrollbar {
+                            width: 8px;
+                        }
+
+                        .modal-content-cash::-webkit-scrollbar-thumb {
+                            background-color: lightgray;
+                            border-radius: 4px;
+                        }
+
+                        .modal-content-cash::-webkit-scrollbar-thumb:hover {
+                            background-color: #7a3a8c;
+                        }
+                    `}
+                    </style>
 
                     <label>
                         Date:
@@ -181,7 +204,8 @@ const DealForm = () => {
                     <label>
                         Client:
                         <Select
-                            value={client} // Установите объект клиента, а не только id
+                            className="custom-select"
+                            value={client}
                             onChange={handleClientChange}
                             options={clients.map((clientOption) => ({
                                 value: clientOption,
@@ -189,41 +213,56 @@ const DealForm = () => {
                             }))}
                             isSearchable={true}
                             placeholder="Select Client"
+                            classNamePrefix="custom-select"
+
                         />
                     </label>
                     <label>
                         Operator:
-                        <select value={selectedOperator} onChange={handleOperatorChange}>
-                            <option value="">Select Operator</option>
-                            {operators.map((operatorOption) => (
-                                <option key={operatorOption.id} value={operatorOption.id}>
-                                    {operatorOption.login}
-                                </option>
-                            ))}
-                        </select>
+                        <Select
+                            className="custom-select"
+                            value={selectedOperator}
+                            onChange={handleOperatorChange}
+                            options={operators.map((operatorOption) => ({
+                                value: operatorOption.id,
+                                label: operatorOption.login,
+                            }))}
+                            isSearchable={true}
+                            placeholder="Select Operator"
+                            classNamePrefix="custom-select"
+                        />
                     </label>
                     <label>
                         Currency 1:
-                        <select value={currency1} onChange={handleCurrency1Change}>
-                            <option value="">Select Currency</option>
-                            {currencies.map((currencyOption) => (
-                                <option key={currencyOption.id} value={currencyOption.short_name}>
-                                    {currencyOption.short_name}
-                                </option>
-                            ))}
-                        </select>
+                        <Select
+                            className="custom-select"
+                            value={selectedCurrency1}
+                            onChange={handleCurrency1Change}
+                            options={currencies.map((currencyOption) => ({
+                                value: currencyOption.short_name,
+                                label: currencyOption.short_name,
+                            }))}
+                            isSearchable={true}
+                            placeholder="Select Currency"
+                            classNamePrefix="custom-select"
+                        />
                     </label>
+
 
                     <label>
                         Currency 2:
-                        <select value={currency2} onChange={handleCurrency2Change}>
-                            <option value="">Select Currency</option>
-                            {currencies.map((currencyOption) => (
-                                <option key={currencyOption.id} value={currencyOption.short_name}>
-                                    {currencyOption.short_name}
-                                </option>
-                            ))}
-                        </select>
+                        <Select
+                            className="custom-select"
+                            value={selectedCurrency2}
+                            onChange={handleCurrency2Change}
+                            options={currencies.filter(currencyOption => currencyOption.short_name !== (selectedCurrency1 ? selectedCurrency1.value : null)).map((currencyOption) => ({
+                                value: currencyOption.short_name,
+                                label: currencyOption.short_name,
+                            }))}
+                            isSearchable={true}
+                            placeholder="Select Currency"
+                            classNamePrefix="custom-select"
+                        />
                     </label>
 
                     <label>
@@ -256,7 +295,7 @@ const DealForm = () => {
 
                     <label>
                         Comment:
-                        <textarea value={comment} onChange={handleCommentChange}/>
+                        <input type="text" value={comment} onChange={handleCommentChange}/>
                     </label>
 
                     <div className="buttons-container">
