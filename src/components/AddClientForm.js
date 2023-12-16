@@ -120,6 +120,7 @@ const AddClientForm = ({ onSave, onCancel }) => {
 
 const AddClientButton = ({ onAddClick }) => (
     <button onClick={onAddClick} className="add-client-button-2">
+        <span style={{ marginRight: '5px',  fontSize: '20px'  }}>+</span>
         Add Client
     </button>
 );

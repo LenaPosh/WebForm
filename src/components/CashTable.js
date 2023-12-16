@@ -106,7 +106,9 @@ const CashTable = () => {
 
     return (
         <div className="table-container-balance">
-            <button onClick={() => setShowForm(true)}>Add</button>
+            <button onClick={() => setShowForm(true)} style={{ padding: '10px 20px'  }}>
+                <span style={{ marginRight: '5px',  fontSize: '20px'  }}>+</span> Add
+            </button>
             <table>
                 <thead>
                 <tr>

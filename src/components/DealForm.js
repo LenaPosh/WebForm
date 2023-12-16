@@ -177,7 +177,9 @@ const DealForm = () => {
 
     return (
         <div className="deal-form-container">
-            <button onClick={handleOpenModal}>Add Deal</button>
+            <button onClick={handleOpenModal}>
+                <span style={{ marginRight: '5px',  fontSize: '20px'  }}>+</span>
+                Add Deal</button>
             <div className={`modal-cash ${isModalVisible ? 'active' : ''}`}>
                 <div className="modal-content-cash" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
                     <style>
