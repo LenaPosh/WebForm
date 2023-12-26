@@ -102,3 +102,24 @@ button:last-child:hover {
 .custom-select__menu {
     font-weight: normal;
 }
+
+.button-rate {
+    background-color: rgba(114, 112, 112, 0.66);
+    /*margin-bottom: 20px;*/
+    margin-top: 1px !important;
+    margin-right: 10px;
+}
+
+.button-rate:hover {
+    background-color: rgba(123, 11, 159, 0.24);
+    color: black;
+}
+
+.button-rate:last-child {
+    background-color: rgba(114, 112, 112, 0.66);
+}
+
+.button-rate:last-child:hover {
+    background-color: rgba(123, 11, 159, 0.24);
+    color: black;
+}

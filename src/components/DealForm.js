@@ -30,6 +30,12 @@ const DealForm = () => {
     const [selectedCurrency1, setSelectedCurrency1] = useState(null);
     const [selectedCurrency2, setSelectedCurrency2] = useState(null);
 
+    const [googleCurrencyRate, setGoogleCurrencyRate] = useState(null);
+    const [xeCurrencyRate, setXeCurrencyRate] = useState(null);
+
+
+
+
     useEffect(() => {
         axios.get('http://18.215.164.227:8001/clients')
             .then(response => setClients(response.data.data))
@@ -48,6 +54,81 @@ const DealForm = () => {
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Error fetching operators:', error));
     }, []);
+
+
+    useEffect(() => {
+        if (currencies.length > 0) { // Проверка, что массив валют не пуст
+            const usdCurrency = currencies.find(c => c.short_name === 'USD');
+            if (usdCurrency) {
+                setSelectedCurrency1({ value: usdCurrency.id, label: usdCurrency.short_name });
+                setCurrency1(usdCurrency.id);
+            }
+        }
+    }, [currencies]);
+
+
+    useEffect(() => {
+        // Запрос курса валют от Google
+        axios.get('URL_ДЛЯ_ЗАПРОСА_КУРСА_GOOGLE').then(response => {
+            setGoogleCurrencyRate(response.data.rate);
+        }).catch(error => console.error('Error fetching Google currency rate:', error));
+
+        // Запрос курса валют от XE
+        axios.get('URL_ДЛЯ_ЗАПРОСА_КУРСА_XE').then(response => {
+            setXeCurrencyRate(response.data.rate);
+        }).catch(error => console.error('Error fetching XE currency rate:', error));
+    }, []);
+
+    useEffect(() => {
+        if (isModalVisible) {
+            const currentDate = new Date();
+            const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+            const formattedTime = `${String(currentDate.getHours()).padStart(2, '0')}:${String(currentDate.getMinutes()).padStart(2, '0')}:${String(currentDate.getSeconds()).padStart(2, '0')}`;
+            setDate(`${formattedDate} ${formattedTime}`);
+        }
+    }, [isModalVisible]);
+
+    useEffect(() => {
+        if (isModalVisible) {
+            const modalContent = document.querySelector('.modal-content-cash');
+            if (modalContent) {
+                modalContent.scrollTop = 0;
+            }
+        }
+    }, [isModalVisible]);
+
+
+    useEffect(() => {
+        const rateValue = parseFloat(rate) || 0;
+        const commissionValue = parseFloat(commission) || 0;
+        const rateFeeValue = rateValue + commissionValue;
+        setRateFee(rateFeeValue.toFixed(2));
+
+        console.log(`rate: ${rateValue}, commission: ${commissionValue}, rateFee: ${rateFeeValue}`);
+    }, [rate, commission]);
+
+
+
+    useEffect(() => {
+        const amountValue = parseFloat(amount) || 0;
+        const rateFeeValue = parseFloat(rateFee) || 0;
+        const feeAmount = amountValue * (rateFeeValue / 100);
+        const totalAmountValue = amountValue - feeAmount;
+        setTotalAmount(totalAmountValue.toFixed(2));
+
+        console.log(`amount: ${amountValue}, rateFee: ${rateFeeValue}, feeAmount: ${feeAmount}, totalAmount: ${totalAmountValue}`);
+    }, [amount, rateFee]);
+
+
+
+    useEffect(() => {
+        const amountValue = parseFloat(amount) || 0;
+        const totalAmountValue = parseFloat(totalAmount) || 0;
+        const profitValue = amountValue - totalAmountValue;
+        setProfit(profitValue.toFixed(2));
+    }, [amount, totalAmount]); // Зависимость от amount и totalAmount для вычисления profit
+
+
 
 
     const handleCurrency1Change = (selectedOption) => {
@@ -82,7 +163,10 @@ const DealForm = () => {
         setComment(e.target.value);
     };
     const handleRateChange = (e) => {
-        setRate(e.target.value);
+        const value = e.target.value;
+        if (/^\d*\.?\d{0,2}$/.test(value) || value === "") {
+            setRate(value);
+        }
     };
 
     const handleRateFeeChange = (e) => {
@@ -151,7 +235,7 @@ const DealForm = () => {
         } else {
             console.error('Client not found');
         }
-
+        console.log(`Adding deal with - amount: ${amount}, rateFee: ${rateFee}, totalAmount: ${totalAmount}, profit: ${profit}`);
 
         setDate('');
         setClient('');
@@ -201,7 +285,7 @@ const DealForm = () => {
 
                     <label>
                         Date:
-                        <input type="date" value={date} onChange={handleDateChange}/>
+                        <input type="text" value={date} onChange={handleDateChange}/>
                     </label>
                     <label>
                         Client:
@@ -235,7 +319,7 @@ const DealForm = () => {
                         />
                     </label>
                     <label>
-                        Currency 1:
+                        Currency In:
                         <Select
                             className="custom-select"
                             value={selectedCurrency1}
@@ -250,9 +334,8 @@ const DealForm = () => {
                         />
                     </label>
 
-
                     <label>
-                        Currency 2:
+                        Currency Out:
                         <Select
                             className="custom-select"
                             value={selectedCurrency2}
@@ -266,7 +349,19 @@ const DealForm = () => {
                             classNamePrefix="custom-select"
                         />
                     </label>
+                    <label>
+                        Rate:
+                        <input type="text" value={rate} onChange={handleRateChange}/>
+                        <button className="button-rate" onClick={() => setRate(googleCurrencyRate)}>Google Rate</button>
+                        <button className="button-rate" onClick={() => setRate(xeCurrencyRate)}>XE Rate</button>
+                    </label>
 
+
+
+                    <label>
+                        Rate Fee:
+                        <input type="text" value={rateFee} onChange={handleRateFeeChange}/>
+                    </label>
                     <label>
                         Commission:
                         <input type="text" value={commission} onChange={handleCommissionChange}/>
@@ -285,19 +380,16 @@ const DealForm = () => {
                         Profit:
                         <input type="text" value={profit} onChange={handleProfitChange}/>
                     </label>
-                    <label>
-                        Rate:
-                        <input type="text" value={rate} onChange={handleRateChange}/>
-                    </label>
 
-                    <label>
-                        Rate Fee:
-                        <input type="text" value={rateFee} onChange={handleRateFeeChange}/>
-                    </label>
 
                     <label>
                         Comment:
-                        <input type="text" value={comment} onChange={handleCommentChange}/>
+                        <input
+                            type="text"
+                            value={comment}
+                            onChange={handleCommentChange}
+                            style={{ height: '70px', marginRight: '10px', padding: '10px 20px', overflowY: 'auto', marginTop: '0' }}
+                        />
                     </label>
 
                     <div className="buttons-container">
@@ -317,12 +409,12 @@ const DealForm = () => {
                     <th>Client</th>
                     <th>Currency 1</th>
                     <th>Currency 2</th>
+                    <th>Rate</th>
+                    <th>Rate Fee</th>
                     <th>Commission</th>
                     <th>Amount</th>
                     <th>Total Amount</th>
-                    <th>Rate</th>
                     <th>Profit</th>
-                    <th>Rate Fee</th>
                     <th>Comment</th>
                 </tr>
                 </thead>
@@ -333,12 +425,12 @@ const DealForm = () => {
                         <td>{deal.client_name + " " + deal.client_last_name}</td>
                         <td>{deal.c1}</td>
                         <td>{deal.c2}</td>
+                        <td>{deal.rate}</td>
+                        <td>{deal.rate_fee}</td>
                         <td>{deal.fee}</td>
                         <td>{deal.amountin}</td>
                         <td>{deal.amountout}</td>
-                        <td>{deal.rate}</td>
                         <td>{deal.profit}</td>
-                        <td>{deal.rate_fee}</td>
                         <td>{deal.comments}</td>
                     </tr>
                 ))}
