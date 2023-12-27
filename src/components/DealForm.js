@@ -128,8 +128,13 @@ const DealForm = () => {
         setProfit(profitValue.toFixed(2));
     }, [amount, totalAmount]); // Зависимость от amount и totalAmount для вычисления profit
 
-
-
+    //
+    // useEffect(() => {
+    //     const commissionValue = parseFloat(commission) || 0;
+    //     const amountValue = parseFloat(amount) || 0;
+    //     const totalAmountValue = amountValue - commissionValue;
+    //     setTotalAmount(totalAmountValue.toFixed(2));
+    // }, [commission, amount]);
 
     const handleCurrency1Change = (selectedOption) => {
         const currencyId = selectedOption ? selectedOption.value : null;
@@ -251,12 +256,7 @@ const DealForm = () => {
     };
 
 
-    useEffect(() => {
-        const commissionValue = parseFloat(commission) || 0;
-        const amountValue = parseFloat(amount) || 0;
-        const totalAmountValue = amountValue - commissionValue;
-        setTotalAmount(totalAmountValue.toFixed(2));
-    }, [commission, amount]);
+
 
 
     return (
