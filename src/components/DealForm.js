@@ -66,18 +66,68 @@ const DealForm = () => {
         }
     }, [currencies]);
 
+    const fetchCurrencyRate = (currency1Id, currency2Id, setRateFunction, rateType) => {
+        console.log(`Fetching ${rateType} Rate:`, currency1Id, currency2Id);
+        if (currency1Id && currency2Id) {
+            axios.get(`http://18.215.164.227:8001/exchange_rates/${currency1Id}/${currency2Id}`)
+                .then(response => {
+                    console.log("Response data:", response.data);
+                    if (response.data && response.data.data) {
+                        let rateValue = response.data.data[rateType.toLowerCase()];
+                        if (rateValue !== undefined) {
+                            setRateFunction(`${rateType} Rate: ${rateValue.toFixed(2)}`);
+                        } else {
+                            console.error(`${rateType} data is not available`);
+                        }
+                    } else {
+                        console.error(`No data available in the response`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error fetching ${rateType} currency rate:`, error);
+                });
+        }
+    };
 
-    useEffect(() => {
-        // Запрос курса валют от Google
-        axios.get('URL_ДЛЯ_ЗАПРОСА_КУРСА_GOOGLE').then(response => {
-            setGoogleCurrencyRate(response.data.rate);
-        }).catch(error => console.error('Error fetching Google currency rate:', error));
 
-        // Запрос курса валют от XE
-        axios.get('URL_ДЛЯ_ЗАПРОСА_КУРСА_XE').then(response => {
-            setXeCurrencyRate(response.data.rate);
-        }).catch(error => console.error('Error fetching XE currency rate:', error));
-    }, []);
+
+    const fetchGoogleRate = (currency1Id, currency2Id) => {
+        fetchCurrencyRate(currency1Id, currency2Id, setGoogleCurrencyRate, "Google");
+    };
+
+    const fetchXERate = (currency1Id, currency2Id) => {
+        fetchCurrencyRate(currency1Id, currency2Id, setXeCurrencyRate, "XE");
+    };
+
+
+
+    const handleCurrency1Change = (selectedOption) => {
+        const currency1Id = selectedOption ? currencies.find(c => c.short_name === selectedOption.value)?.id : null;
+        console.log('Currency 1 ID:', currency1Id);
+        setCurrency1(currency1Id);
+        setSelectedCurrency1(selectedOption);
+
+        if (currency1Id && currency2) {
+            fetchGoogleRate(currency1Id, currency2);
+            fetchXERate(currency1Id, currency2);
+        }
+    };
+
+    const handleCurrency2Change = (selectedOption) => {
+        const currency2Id = selectedOption ? currencies.find(c => c.short_name === selectedOption.value)?.id : null;
+        console.log('Currency 2 ID:', currency2Id);
+        setCurrency2(currency2Id);
+        setSelectedCurrency2(selectedOption);
+
+        if (currency1 && currency2Id) {
+            fetchGoogleRate(currency1, currency2Id);
+            fetchXERate(currency1, currency2Id);
+        }
+    };
+
+
+
+
 
     useEffect(() => {
         if (isModalVisible) {
@@ -104,7 +154,6 @@ const DealForm = () => {
         const rateFeeValue = rateValue + commissionValue;
         setRateFee(rateFeeValue.toFixed(2));
 
-        console.log(`rate: ${rateValue}, commission: ${commissionValue}, rateFee: ${rateFeeValue}`);
     }, [rate, commission]);
 
 
@@ -116,7 +165,6 @@ const DealForm = () => {
         const totalAmountValue = amountValue - feeAmount;
         setTotalAmount(totalAmountValue.toFixed(2));
 
-        console.log(`amount: ${amountValue}, rateFee: ${rateFeeValue}, feeAmount: ${feeAmount}, totalAmount: ${totalAmountValue}`);
     }, [amount, rateFee]);
 
 
@@ -128,25 +176,6 @@ const DealForm = () => {
         setProfit(profitValue.toFixed(2));
     }, [amount, totalAmount]); // Зависимость от amount и totalAmount для вычисления profit
 
-    //
-    // useEffect(() => {
-    //     const commissionValue = parseFloat(commission) || 0;
-    //     const amountValue = parseFloat(amount) || 0;
-    //     const totalAmountValue = amountValue - commissionValue;
-    //     setTotalAmount(totalAmountValue.toFixed(2));
-    // }, [commission, amount]);
-
-    const handleCurrency1Change = (selectedOption) => {
-        const currencyId = selectedOption ? selectedOption.value : null;
-        setCurrency1(currencyId);
-        setSelectedCurrency1(selectedOption);
-    };
-
-    const handleCurrency2Change = (selectedOption) => {
-        const currencyId = selectedOption ? selectedOption.value : null;
-        setCurrency2(currencyId);
-        setSelectedCurrency2(selectedOption);
-    };
 
 
     const handleCommissionChange = (e) => {
@@ -203,9 +232,15 @@ const DealForm = () => {
             }
 
             const operatorID = selectedOperator ? selectedOperator.value : null;
+            console.log('Selected currencies:', currency1, currency2);
 
-            const currencyInId = currencies.find(c => c.short_name === currency1)?.id;
-            const currencyOutId = currencies.find(c => c.short_name === currency2)?.id;
+            // const currencyInId = currencies.find(c => c.short_name === currency1)?.id;
+            // const currencyOutId = currencies.find(c => c.short_name === currency2)?.id;
+            //
+            // if (!currencyInId || !currencyOutId) {
+            //     console.error('Currency IDs not found');
+            //     return;
+            // }
 
             const currentDate = new Date();
             const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')} ${String(currentDate.getHours()).padStart(2, '0')}:${String(currentDate.getMinutes()).padStart(2, '0')}:${String(currentDate.getSeconds()).padStart(2, '0')}`;
@@ -214,8 +249,8 @@ const DealForm = () => {
                 users_id: operatorID,
                 clients_id: clientID,
                 date_deal: formattedDate,
-                currencyin: currencyInId,
-                currencyout: currencyOutId,
+                currencyin: currency1,
+                currencyout: currency2,
                 amountin: amount,
                 amountout: totalAmount,
                 rate: rate,
@@ -225,7 +260,7 @@ const DealForm = () => {
                 comments: comment,
             };
 
-            console.log('Данные для отправки на сервер:', newDeal);
+            console.log('Sending deal data:', newDeal);
 
             axios.post('http://18.215.164.227:8001/deal', newDeal, {
                 headers: {
@@ -233,6 +268,7 @@ const DealForm = () => {
                 }
             })
                 .then(response => {
+                    console.log('Deal added successfully:', response);
                 })
                 .catch(error => {
                     console.error('Error adding deal:', error);
@@ -240,7 +276,6 @@ const DealForm = () => {
         } else {
             console.error('Client not found');
         }
-        console.log(`Adding deal with - amount: ${amount}, rateFee: ${rateFee}, totalAmount: ${totalAmount}, profit: ${profit}`);
 
         setDate('');
         setClient('');
@@ -352,8 +387,12 @@ const DealForm = () => {
                     <label>
                         Rate:
                         <input type="text" value={rate} onChange={handleRateChange}/>
-                        <button className="button-rate" onClick={() => setRate(googleCurrencyRate)}>Google Rate</button>
-                        <button className="button-rate" onClick={() => setRate(xeCurrencyRate)}>XE Rate</button>
+                        <button className="button-rate" onClick={fetchGoogleRate}>
+                            {googleCurrencyRate || 'Google Rate'}
+                        </button>
+                        <button className="button-rate" onClick={fetchXERate}>
+                            {xeCurrencyRate || 'XE Rate'}
+                        </button>
                     </label>
 
 
