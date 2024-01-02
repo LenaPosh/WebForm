@@ -91,6 +91,7 @@ const DealForm = () => {
 
 
 
+
     const fetchGoogleRate = (currency1Id, currency2Id) => {
         fetchCurrencyRate(currency1Id, currency2Id, setGoogleCurrencyRate, "Google");
     };
@@ -98,6 +99,22 @@ const DealForm = () => {
     const fetchXERate = (currency1Id, currency2Id) => {
         fetchCurrencyRate(currency1Id, currency2Id, setXeCurrencyRate, "XE");
     };
+
+
+    const handleGoogleRateClick = () => {
+        if (googleCurrencyRate) {
+            const rateValue = googleCurrencyRate.split(': ')[1];
+            setRate(rateValue);
+        }
+    };
+
+    const handleXERateClick = () => {
+        if (xeCurrencyRate) {
+            const rateValue = xeCurrencyRate.split(': ')[1];
+            setRate(rateValue);
+        }
+    };
+
 
 
 
@@ -150,11 +167,12 @@ const DealForm = () => {
 
     useEffect(() => {
         const rateValue = parseFloat(rate) || 0;
-        const commissionValue = parseFloat(commission) || 0;
+        const commissionPercent = parseFloat(commission) || 0;
+        const commissionValue = rateValue * (commissionPercent / 100);
         const rateFeeValue = rateValue + commissionValue;
         setRateFee(rateFeeValue.toFixed(2));
-
     }, [rate, commission]);
+
 
 
 
@@ -269,6 +287,7 @@ const DealForm = () => {
             })
                 .then(response => {
                     console.log('Deal added successfully:', response);
+                    setIsModalVisible(false);
                 })
                 .catch(error => {
                     console.error('Error adding deal:', error);
@@ -387,10 +406,10 @@ const DealForm = () => {
                     <label>
                         Rate:
                         <input type="text" value={rate} onChange={handleRateChange}/>
-                        <button className="button-rate" onClick={fetchGoogleRate}>
+                        <button className="button-rate" onClick={handleGoogleRateClick}>
                             {googleCurrencyRate || 'Google Rate'}
                         </button>
-                        <button className="button-rate" onClick={fetchXERate}>
+                        <button className="button-rate" onClick={handleXERateClick}>
                             {xeCurrencyRate || 'XE Rate'}
                         </button>
                     </label>
