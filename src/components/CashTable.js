@@ -29,7 +29,7 @@ const CashTable = () => {
 
     const fetchData = () => {
         setLoading(true);
-        axios.get('http://18.215.164.227:8001/cash_transactions')
+        axios.get('https://conexuscrypto.co.za/api/cash_transactions')
             .then(response => {
 
                 const sortedData = response.data.data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -52,15 +52,15 @@ const CashTable = () => {
 
     useEffect(() => {
         fetchData();
-        axios.get('http://18.215.164.227:8001/operators')
+        axios.get('https://conexuscrypto.co.za/api/operators')
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Ошибка при получении операторов:', error));
 
-        axios.get('http://18.215.164.227:8001/currencies')
+        axios.get('https://conexuscrypto.co.za/api/currencies')
             .then(response => setCurrencies(response.data.data))
             .catch(error => console.error('Ошибка при получении валют:', error));
 
-        axios.get('http://18.215.164.227:8001/directions')
+        axios.get('https://conexuscrypto.co.za/api/directions')
             .then(response => setDirections(response.data.data))
             .catch(error => console.error('Ошибка при получении направлений:', error));
     }, []);
@@ -83,7 +83,7 @@ const CashTable = () => {
 
         console.log('Отправка данных на сервер:', data);
 
-        axios.post('http://18.215.164.227:8001/cash_transaction', data, {
+        axios.post('https://conexuscrypto.co.za/api/cash_transaction', data, {
             headers: {
                 'Content-Type': 'application/json'
             }

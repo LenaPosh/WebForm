@@ -56,7 +56,7 @@ const TableClients = () => {
 
     const deleteRow = async (id) => {
         try {
-            await axios.delete(`http://18.215.164.227:8001/client/${id}`);
+            await axios.delete(`https://conexuscrypto.co.za/api/client/${id}`);
             const newData = data.filter((item) => item.id !== id);
             setData(newData);
         } catch (error) {
@@ -87,7 +87,7 @@ const TableClients = () => {
         console.log("Сохранение изменений:", updatedClients);
         try {
             for (const client of updatedClients) {
-                await axios.put(`http://18.215.164.227:8001/client/${client.id}`, client);
+                await axios.put(`https://conexuscrypto.co.za/api/client/${client.id}`, client);
             }
             setUpdatedClients([]);
             fetchData();

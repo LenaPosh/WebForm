@@ -53,7 +53,7 @@ const AddClientForm = ({ onSave, onCancel }) => {
             };
 
 
-            await axios.post('http://18.215.164.227:8001/client', formattedData, {
+            await axios.post('https://conexuscrypto.co.za/api/client', formattedData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

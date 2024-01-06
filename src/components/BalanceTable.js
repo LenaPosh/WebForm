@@ -8,7 +8,7 @@ const BalancesTable = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('http://18.215.164.227:8001/balances')
+        axios.get('https://conexuscrypto.co.za/api/balances')
             .then(response => {
                 setData(response.data.data);
                 setLoading(false);

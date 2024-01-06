@@ -37,7 +37,7 @@ const Table = () => {
         if (!editedItem) return;
 
         try {
-            await axios.put(`http://18.215.164.227:8001/client/${id}`, editedItem);
+            await axios.put(`https://conexuscrypto.co.za/api/client/${id}`, editedItem);
             setEditingRowId(null);
             console.log('Изменения успешно сохранены');
         } catch (error) {
@@ -47,7 +47,7 @@ const Table = () => {
 
     useEffect(() => {
         const fetchData = () => {
-            axios.get('http://18.215.164.227:8001/clients')
+            axios.get('https://conexuscrypto.co.za/api/clients')
                 .then(response => {
                     console.log('Data from server:', response.data); // Для отладки
                     const formattedData = response.data.data.map(item => ({

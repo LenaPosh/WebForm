@@ -41,7 +41,7 @@ const DealForm = () => {
             .then(response => setClients(response.data.data))
             .catch(error => console.error('Error fetching clients:', error));
 
-        axios.get('http://18.215.164.227:8001/currencies')
+        axios.get('https://conexuscrypto.co.za/api/currencies')
             .then(response => setCurrencies(response.data.data))
             .catch(error => console.error('Error fetching currencies:', error));
 
@@ -50,7 +50,7 @@ const DealForm = () => {
             .catch(error => console.error('Error fetching deals:', error));
 
         // Получите список операторов (пользователей) и сохраните его в состоянии
-        axios.get('http://18.215.164.227:8001/operators')
+        axios.get('https://conexuscrypto.co.za/api/operators')
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Error fetching operators:', error));
     }, []);
@@ -69,7 +69,7 @@ const DealForm = () => {
     const fetchCurrencyRate = (currency1Id, currency2Id, setRateFunction, rateType) => {
         console.log(`Fetching ${rateType} Rate:`, currency1Id, currency2Id);
         if (currency1Id && currency2Id) {
-            axios.get(`http://18.215.164.227:8001/exchange_rates/${currency1Id}/${currency2Id}`)
+            axios.get(`https://conexuscrypto.co.za/api/exchange_rates/${currency1Id}/${currency2Id}`)
                 .then(response => {
                     console.log("Response data:", response.data);
                     if (response.data && response.data.data) {
@@ -280,7 +280,7 @@ const DealForm = () => {
 
             console.log('Sending deal data:', newDeal);
 
-            axios.post('http://18.215.164.227:8001/deal', newDeal, {
+            axios.post('https://conexuscrypto.co.za/api/deal', newDeal, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
