@@ -7,6 +7,7 @@ import { IoMdCash } from 'react-icons/io';
 import Logo from './logo.png';
 import SignInComponent from "./SignInComponent";
 import { GiCash } from "react-icons/gi";
+import { BsBank2 } from "react-icons/bs";
 
 const Header = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -43,6 +44,10 @@ const Header = () => {
             <NavLink to="/balances" className="menu-link" activeClassName="activeclassname">
                 <GiCash className="icon" />
                 <span className="menu-link-text">Balances</span>
+            </NavLink>
+            <NavLink to="/loans" className="menu-link" activeClassName="activeclassname">
+                <BsBank2 className="icon" />
+                <span className="menu-link-text">Loans</span>
             </NavLink>
 
             {isModalOpen && (

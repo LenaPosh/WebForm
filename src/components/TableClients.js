@@ -22,7 +22,7 @@ const TableClients = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://18.215.164.227:8001/clients');
+            const response = await axios.get('https://conexuscrypto.co.za/api/clients');
             if (Array.isArray(response.data.data)) {
                 const userData = response.data.data.map((user) => ({
                     id: user.id,

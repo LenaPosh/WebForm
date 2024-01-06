@@ -37,7 +37,7 @@ const DealForm = () => {
 
 
     useEffect(() => {
-        axios.get('http://18.215.164.227:8001/clients')
+        axios.get('https://conexuscrypto.co.za/api/clients')
             .then(response => setClients(response.data.data))
             .catch(error => console.error('Error fetching clients:', error));
 
@@ -45,7 +45,7 @@ const DealForm = () => {
             .then(response => setCurrencies(response.data.data))
             .catch(error => console.error('Error fetching currencies:', error));
 
-        axios.get('http://18.215.164.227:8001/deals')
+        axios.get('https://conexuscrypto.co.za/api/deals')
             .then(response => setDeals(response.data.data))
             .catch(error => console.error('Error fetching deals:', error));
 

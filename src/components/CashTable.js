@@ -24,6 +24,9 @@ const CashTable = () => {
     const [currencies, setCurrencies] = useState([]);
     const [directions, setDirections] = useState([]);
 
+    const [isCredit, setIsCredit] = useState(false);
+    const [isCreditReturned, setIsCreditReturned] = useState({});
+
     const fetchData = () => {
         setLoading(true);
         axios.get('http://18.215.164.227:8001/cash_transactions')
@@ -93,7 +96,14 @@ const CashTable = () => {
             .catch(error => {
                 console.error('Ошибка при отправке данных:', error);
             });
+
+        const creditData = {
+            ...data,
+            isCredit: isCredit
+        };
     };
+
+
 
     if (loading) {
         return <p>Loading...</p>;
@@ -102,7 +112,12 @@ const CashTable = () => {
     if (error) {
         return <p>Error: {error}</p>;
     }
+    const handleCreditReturn = (transactionId) => {
+        const returnDate = formatDate(new Date().toISOString());
+        setIsCreditReturned(prevState => ({ ...prevState, [transactionId]: returnDate }));
 
+        // Здесь код для отправки данных о возврате кредита на сервер
+    };
 
     return (
         <div className="table-container-balance">
@@ -116,8 +131,11 @@ const CashTable = () => {
                     <th>User ID</th>
                     <th>Currency ID</th>
                     <th>Direction ID</th>
+                    <th>Credit</th>
+                    <th>Credit Return</th>
                     <th>Amount</th>
                     <th>Сomments</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -127,6 +145,14 @@ const CashTable = () => {
                         <td>{item.login}</td>
                         <td>{item.short_name}</td>
                         <td>{item.direction}</td>
+                        <td>{item.isCredit ? 'Yes' : 'No'}</td>
+                        <td>
+                            {item.isCredit && !isCreditReturned[item.id] ? (
+                                <button onClick={() => handleCreditReturn(item.id)}>Return Credit</button>
+                            ) : (
+                                isCreditReturned[item.id]
+                            )}
+                        </td>
                         <td>{item.amount}</td>
                         <td>{item.comments}</td>
                     </tr>
@@ -161,6 +187,11 @@ const CashTable = () => {
                                 {directions.map(direction => <option key={direction.id} value={direction.id}>{direction.direction}</option>)}
                             </select>
                         </div>
+                        <div>
+                            <label htmlFor="isCredit">Credit:</label>
+                            <input type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
+                        </div>
+
                         <div>
                             <label htmlFor="amount">Amount:</label>
                             <input type="number" name="amount" id="amount" required />

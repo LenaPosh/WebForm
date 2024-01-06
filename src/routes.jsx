@@ -4,6 +4,7 @@ import DealsPage from './pages/DealsPage';
 import CashPage from './pages/CashPage';
 import SignInPage from './pages/SignInPage';
 import BalancesPage from "./pages/BalancesPage";
+import LoansPage from "./pages/LoansPage";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
         path: '/balances',
         element: <BalancesPage />,
     },
+    {
+        path: '/loans',
+        element: <LoansPage/>
+    }
 
 ]);
 
