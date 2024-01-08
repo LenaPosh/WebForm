@@ -24,3 +24,13 @@
     color: rgba(255, 255, 255, 0.6);
     font-weight: normal;
 }
+
+@media (max-width: 600px) {
+    .signin-page {
+        z-index: 0;
+    }
+
+    .signin-page h2 {
+        font-size: 18px;
+    }
+}

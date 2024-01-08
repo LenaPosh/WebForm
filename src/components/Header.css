@@ -144,3 +144,29 @@ body {
     cursor: pointer;
     color: #4b296b;
 }
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .menu-link {
+        flex-direction: row;
+        padding: 10px 15px;
+    }
+
+    .icon {
+        margin-top: 0;
+        margin-right: 10px;
+    }
+
+    .modal-content {
+        width: 80%;
+        padding: 10px;
+    }
+
+    .form-input, .form-button {
+        width: 80%;
+    }
+}

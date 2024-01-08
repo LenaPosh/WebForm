@@ -123,3 +123,38 @@ button:last-child:hover {
     background-color: rgba(123, 11, 159, 0.24);
     color: black;
 }
+
+
+@media (max-width: 600px) {
+    .deal-form-container {
+        max-width: 100%;
+        margin: 10px 10px;
+        padding: 15px;
+    }
+
+    select, input {
+        width: calc(100% - 8px); /* Уменьшение отступа */
+        padding: 8px; /* Уменьшение отступа */
+    }
+
+    .deals-table th, .deals-table td {
+        padding: 10px; /* Уменьшение отступа */
+        font-size: 12px; /* Уменьшение размера шрифта */
+    }
+
+    .buttons-container {
+        /*flex-direction: column; !* Вертикальное расположение кнопок *!*/
+        align-items: center; /* Центрирование кнопок */
+    }
+
+    button {
+        /*width: 90%; !* Полная ширина кнопки *!*/
+        margin-bottom: 10px; /* Отступ между кнопками */
+    }
+
+    .table-container {
+        overflow-x: auto;
+        font-size: 14px;
+    }
+
+}

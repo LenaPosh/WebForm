@@ -101,3 +101,47 @@
     font-size: small;
     margin-top: 0;
 }
+
+
+
+/* Медиа-запросы для мобильных устройств */
+
+@media (max-width: 600px) {
+    .deal-form-container-2 {
+        max-width: 100%;
+        padding: 15px;
+        margin: 10px auto;
+    }
+
+    .deal-form-container-2 label {
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .deal-form-container-2 input[type="text"],
+    .deal-form-container-2 input[type="date"],
+    .deal-form-container-2 input[type="tel"],
+    .deal-form-container-2 textarea {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .deal-form-container-2 textarea {
+        height: 100px; /* Увеличение для лучшего ввода текста */
+    }
+
+    .deal-form-container-2 .buttons-container-2 button,
+    .add-client-button-2 {
+        padding: 12px 24px;
+        font-size: 16px; /* Увеличение для лучшего доступа и читаемости */
+    }
+
+    .add-client-button-2 {
+        width: auto; /* Адаптация ширины кнопки */
+        margin-left: 10px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+}

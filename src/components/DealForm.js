@@ -34,8 +34,6 @@ const DealForm = () => {
     const [xeCurrencyRate, setXeCurrencyRate] = useState(null);
 
 
-
-
     useEffect(() => {
         axios.get('https://conexuscrypto.co.za/api/clients')
             .then(response => setClients(response.data.data))
@@ -459,41 +457,45 @@ const DealForm = () => {
             </div>
 
             {/* Таблица для отображения сделок */}
-
-            <table className="deals-table">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th>Currency 1</th>
-                    <th>Currency 2</th>
-                    <th>Rate</th>
-                    <th>Rate Fee</th>
-                    <th>Commission</th>
-                    <th>Amount</th>
-                    <th>Total Amount</th>
-                    <th>Profit</th>
-                    <th>Comment</th>
-                </tr>
-                </thead>
-                <tbody>
-                {deals.map((deal, index) => (
-                    <tr key={index}>
-                        <td>{deal.date_deal ? new Date(deal.date_deal).toLocaleString() : 'Нет данных'}</td>
-                        <td>{deal.client_name + " " + deal.client_last_name}</td>
-                        <td>{deal.c1}</td>
-                        <td>{deal.c2}</td>
-                        <td>{deal.rate}</td>
-                        <td>{deal.rate_fee}</td>
-                        <td>{deal.fee}</td>
-                        <td>{deal.amountin}</td>
-                        <td>{deal.amountout}</td>
-                        <td>{deal.profit}</td>
-                        <td>{deal.comments}</td>
+            <div className="table-container">
+                <table className="deals-table">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Currency In</th>
+                        <th>Currency Out</th>
+                        <th>Rate</th>
+                        <th>Rate Fee</th>
+                        <th>Commission</th>
+                        <th>Amount</th>
+                        <th>Total Amount</th>
+                        <th>Profit</th>
+                        <th>Comment</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {deals.map((deal, index) => (
+                        <tr key={index}>
+                            <td>{deal.date_deal ? new Date(deal.date_deal).toLocaleString() : 'Нет данных'}</td>
+                            <td>{deal.client_name + " " + deal.client_last_name}</td>
+                            <td>{deal.c1}</td>
+                            <td>{deal.c2}</td>
+                            <td>{deal.rate}</td>
+                            <td>{deal.rate_fee}</td>
+                            <td>{deal.fee}</td>
+                            <td>{deal.amountin}</td>
+                            <td>{deal.amountout}</td>
+                            <td>{deal.profit}</td>
+                            <td>{deal.comments}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+            </div>
+
+
         </div>
     );
 }

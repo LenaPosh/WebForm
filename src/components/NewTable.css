@@ -43,3 +43,27 @@ tr:hover {
     margin-left: 40px;
     margin-top: 10px;
 }
+
+@media (max-width: 600px) {
+    .client-table {
+        width: 100%;
+        margin-left: 5px;
+        margin-right: 5px;
+        font-size: 12px; /* Уменьшение размера шрифта для лучшей читаемости */
+    }
+
+    th, td {
+        padding: 2px; /* Уменьшение отступов в ячейках */
+    }
+
+    .search-input {
+        width: 60%; /* Увеличение ширины поля поиска для лучшего доступа */
+        margin-left: 10px;
+    }
+
+    .delete-button, .edit-button {
+        padding: 1px 2px; /* Уменьшение размера кнопок */
+        font-size: 10px; /* Уменьшение размера текста на кнопках */
+    }
+
+}
