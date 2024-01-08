@@ -131,8 +131,8 @@ const CashTable = () => {
                     <th>User ID</th>
                     <th>Currency ID</th>
                     <th>Direction ID</th>
-                    <th>Credit</th>
-                    <th>Credit Return</th>
+                    <th>Loans</th>
+                    <th>Loans Return</th>
                     <th>Amount</th>
                     <th>Сomments</th>
 

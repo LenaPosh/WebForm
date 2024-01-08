@@ -1,0 +1,9 @@
+.table-container-loans {
+    max-width: 800px;
+    margin: 20px auto;
+    overflow-x: auto;
+    font-family: Arial, sans-serif;
+    background-color: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый фон */
+    padding: 20px; /* Добавляем отступы для контейнера */
+    border-radius: 10px; /* Добавляем скругление углов */
+}
