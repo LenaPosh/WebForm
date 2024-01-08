@@ -97,10 +97,10 @@ const CashTable = () => {
                 console.error('Ошибка при отправке данных:', error);
             });
 
-        const creditData = {
-            ...data,
-            isCredit: isCredit
-        };
+        // const creditData = {
+        //     ...data,
+        //     isCredit: isCredit
+        // };
     };
 
 
