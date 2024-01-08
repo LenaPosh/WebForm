@@ -62,3 +62,10 @@ tbody tr:hover {
     max-width: 500px;
     width: 100%;
 }
+
+@media (max-width: 600px) {
+
+    .modal-content-cash {
+        width: 80%;
+    }
+}

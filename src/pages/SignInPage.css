@@ -33,4 +33,10 @@
     .signin-page h2 {
         font-size: 18px;
     }
+
+    .signin-page {
+        /*max-width: 300px;*/
+        width: 90%;
+    }
+
 }

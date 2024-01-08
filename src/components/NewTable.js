@@ -104,109 +104,112 @@ const Table = () => {
                 onChange={handleSearchChange}
                 style={{ marginBottom: '10px' }}
             />
-            <table className="client-table" style={{ marginRight: '0px' }}>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Last Name</th>
-                    <th>Passport ID</th>
-                    <th>Date Added</th>
-                    <th>Phone</th>
-                    <th>Comments</th>
-                    <th style={{ padding: '5px' }}>Actions</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {Array.isArray(filteredData) && filteredData.length > 0 ? (
-                    filteredData.map(item => (
-                        <tr key={item.id}>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="text"
-                                        value={item.name}
-                                        pattern={textPattern}
-                                        onChange={(e) => handleEditChange(item.id, 'name', e.target.value)}
-                                    />
-                                ) : (
-                                    item.name
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="text"
-                                        value={item.last_name}
-                                        pattern={textPattern}
-                                        onChange={(e) => handleEditChange(item.id, 'last_name', e.target.value)}
-                                    />
-                                ) : (
-                                    item.last_name
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="text"
-                                        value={item.document}
-                                        onChange={(e) => handleEditChange(item.id, 'document', e.target.value)}
-                                    />
-                                ) : (
-                                    item.document
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="text"
-                                        value={item.date_added}
-                                        onChange={(e) => handleEditChange(item.id, 'date_added', e.target.value)}
-                                    />
-                                ) : (
-                                    item.date_added
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="tel"
-                                        value={item.phone}
-                                        pattern="[0-9]*"
-                                        onChange={(e) => handleEditChange(item.id, 'phone', e.target.value)}
-                                    />
-                                ) : (
-                                    item.phone
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <input
-                                        type="text"
-                                        value={item.comments}
-                                        onChange={(e) => handleEditChange(item.id, 'comments', e.target.value)}
-                                    />
-                                ) : (
-                                    item.comments
-                                )}
-                            </td>
-                            <td>
-                                {editingRowId === item.id ? (
-                                    <button onClick={() => handleSave(item.id)}><FontAwesomeIcon icon={faSave} /></button>
-                                ) : (
-                                    <button onClick={() => handleEdit(item.id)}><FontAwesomeIcon icon={faEdit} /></button>
-                                )}
-
-                            </td>
-                        </tr>
-                    ))
-                ) : (
+            <div className="table-container">
+                <table className="client-table" style={{ marginRight: '0px' }}>
+                    <thead>
                     <tr>
-                        <td colSpan="7">No data available</td>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                        <th>Passport ID</th>
+                        <th>Date Added</th>
+                        <th>Phone</th>
+                        <th>Comments</th>
+                        <th style={{ padding: '5px' }}>Actions</th>
+
                     </tr>
-                )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {Array.isArray(filteredData) && filteredData.length > 0 ? (
+                        filteredData.map(item => (
+                            <tr key={item.id}>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={item.name}
+                                            pattern={textPattern}
+                                            onChange={(e) => handleEditChange(item.id, 'name', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.name
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={item.last_name}
+                                            pattern={textPattern}
+                                            onChange={(e) => handleEditChange(item.id, 'last_name', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.last_name
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={item.document}
+                                            onChange={(e) => handleEditChange(item.id, 'document', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.document
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={item.date_added}
+                                            onChange={(e) => handleEditChange(item.id, 'date_added', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.date_added
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="tel"
+                                            value={item.phone}
+                                            pattern="[0-9]*"
+                                            onChange={(e) => handleEditChange(item.id, 'phone', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.phone
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={item.comments}
+                                            onChange={(e) => handleEditChange(item.id, 'comments', e.target.value)}
+                                        />
+                                    ) : (
+                                        item.comments
+                                    )}
+                                </td>
+                                <td>
+                                    {editingRowId === item.id ? (
+                                        <button onClick={() => handleSave(item.id)}><FontAwesomeIcon icon={faSave} /></button>
+                                    ) : (
+                                        <button onClick={() => handleEdit(item.id)}><FontAwesomeIcon icon={faEdit} /></button>
+                                    )}
+
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="7">No data available</td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+            </div>
+
 
 г        </div>
     );

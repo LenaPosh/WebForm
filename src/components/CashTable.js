@@ -189,7 +189,7 @@ const CashTable = () => {
                         </div>
                         <div>
                             <label htmlFor="isCredit">Credit:</label>
-                            <input type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
+                            <input style={{alignContent: 'flexStart'}} type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
                         </div>
 
                         <div>

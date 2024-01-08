@@ -108,7 +108,7 @@
 
 @media (max-width: 600px) {
     .deal-form-container-2 {
-        max-width: 100%;
+        max-width: 90%;
         padding: 15px;
         margin: 10px auto;
     }
@@ -132,7 +132,7 @@
 
     .deal-form-container-2 .buttons-container-2 button,
     .add-client-button-2 {
-        padding: 12px 24px;
+        /*padding: 12px 24px;*/
         font-size: 16px; /* Увеличение для лучшего доступа и читаемости */
     }
 
