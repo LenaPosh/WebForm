@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SignInForm = ({ handleSignIn }) => {
     const [loginData, setLoginData] = useState({
@@ -16,12 +17,26 @@ const SignInForm = ({ handleSignIn }) => {
         });
     };
 
-    const handleSignInSubmit = (e) => {
+    const handleSignInSubmit = async (e) => {
         e.preventDefault();
-        // Логика для отправки данных на сервер для аутентификации
-        console.log('Вход:', loginData);
-        // После успешной аутентификации
-        setIsAuthenticated(true);
+
+        try {
+            const params = new URLSearchParams();
+            params.append('username', loginData.username);
+            params.append('password', loginData.password);
+
+            const response = await axios.post('https://conexuscrypto.co.za/api/login', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+
+            console.log('Response from server:', response.data);
+            setIsAuthenticated(true);
+
+        } catch (error) {
+            console.error('Error during authentication:', error.message);
+        }
     };
 
     if (isAuthenticated) {
@@ -56,4 +71,6 @@ const SignInForm = ({ handleSignIn }) => {
 };
 
 export default SignInForm;
+
+
 

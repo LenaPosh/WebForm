@@ -9,24 +9,32 @@ const SignInComponent = ({ handleSignIn }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setLoginData({
-            ...loginData,
+        setLoginData(prevState => ({
+            ...prevState,
             [name]: value,
-        });
+        }));
     };
 
     const handleSignInSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('', loginData);
+            const params = new URLSearchParams();
+            params.append('username', loginData.username);
+            params.append('password', loginData.password);
+
+            const response = await axios.post('https://conexuscrypto.co.za/api/login', {
+                username: loginData.username,
+                password: loginData.password
+            });
+
 
             console.log('Response from server:', response.data);
 
+            // Вызывайте handleSignIn с данными, возвращаемыми сервером, если это необходимо
+            handleSignIn(response.data);
 
-            handleSignIn(loginData);
         } catch (error) {
-
             console.error('Error during authentication:', error.message);
         }
     };
@@ -59,3 +67,5 @@ const SignInComponent = ({ handleSignIn }) => {
 };
 
 export default SignInComponent;
+
+

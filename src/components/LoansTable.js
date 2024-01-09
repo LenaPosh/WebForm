@@ -46,7 +46,7 @@ const LoansTable = () => {
                 </thead>
                 <tbody>
                 {data.map(item => (
-                    <tr key={item.id}>
+                    <tr key={item.id} className={item.direction === 'Deposit' ? 'deposit-row' : 'withdraw-row'}>
                         <td>{item.id}</td>
                         <td>{item.date}</td>
                         <td>{item.login}</td>
