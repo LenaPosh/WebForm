@@ -222,7 +222,7 @@ const CashTable = () => {
                                     name="isCredit"
                                     id="isCredit"
                                     onChange={(e) => setIsCredit(e.target.checked)}
-                                    style={{ width: '18px', height: '20px', margin: '0 3px 10px 0' }} // Задаем размер и отступы для чекбокса
+                                    style={{ width: '18px', height: '20px', margin: '0 3px 10px 0' }}
                                 />
                             </div>
 
