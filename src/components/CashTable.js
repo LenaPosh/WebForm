@@ -214,9 +214,16 @@ const CashTable = () => {
                                 {directions.map(direction => <option key={direction.id} value={direction.id}>{direction.direction}</option>)}
                             </select>
                         </div>
+
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                <label htmlFor="isCredit" style={{ marginRight: '5px' }}>Loan:</label>
-                                <input type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
+                                <label htmlFor="isCredit" style={{ marginRight: '15px' }}>Loan:</label>
+                                <input
+                                    type="checkbox"
+                                    name="isCredit"
+                                    id="isCredit"
+                                    onChange={(e) => setIsCredit(e.target.checked)}
+                                    style={{ width: '18px', height: '20px', margin: '0 3px 10px 0' }} // Задаем размер и отступы для чекбокса
+                                />
                             </div>
 
 
