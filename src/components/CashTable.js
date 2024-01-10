@@ -28,8 +28,20 @@ const CashTable = () => {
     const [isCreditReturned, setIsCreditReturned] = useState({});
 
     const fetchData = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found, redirecting to login...');
+
+            setError('Please log in to view this page.');
+            setLoading(false);
+            return;
+        }
         setLoading(true);
-        axios.get('https://conexuscrypto.co.za/api/cash_transactions')
+        axios.get('https://conexuscrypto.co.za/api/cash_transactions', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
 
                 const sortedData = response.data.data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -51,16 +63,29 @@ const CashTable = () => {
 
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
         fetchData();
-        axios.get('https://conexuscrypto.co.za/api/operators')
+        axios.get('https://conexuscrypto.co.za/api/operators', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Ошибка при получении операторов:', error));
 
-        axios.get('https://conexuscrypto.co.za/api/currencies')
+        axios.get('https://conexuscrypto.co.za/api/currencies', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setCurrencies(response.data.data))
             .catch(error => console.error('Ошибка при получении валют:', error));
 
-        axios.get('https://conexuscrypto.co.za/api/directions')
+        axios.get('https://conexuscrypto.co.za/api/directions', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setDirections(response.data.data))
             .catch(error => console.error('Ошибка при получении направлений:', error));
     }, []);
@@ -83,9 +108,11 @@ const CashTable = () => {
 
         console.log('Отправка данных на сервер:', data);
 
+        const token = localStorage.getItem('token');
         axios.post('https://conexuscrypto.co.za/api/cash_transaction', data, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             }
         })
             .then(response => {
@@ -187,10 +214,12 @@ const CashTable = () => {
                                 {directions.map(direction => <option key={direction.id} value={direction.id}>{direction.direction}</option>)}
                             </select>
                         </div>
-                        <div>
-                            <label htmlFor="isCredit">Credit:</label>
-                            <input style={{alignContent: 'flexStart'}} type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
-                        </div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                <label htmlFor="isCredit" style={{ marginRight: '5px' }}>Loan:</label>
+                                <input type="checkbox" name="isCredit" id="isCredit" onChange={(e) => setIsCredit(e.target.checked)} />
+                            </div>
+
+
 
                         <div>
                             <label htmlFor="amount">Amount:</label>
@@ -211,5 +240,6 @@ const CashTable = () => {
 };
 
 export default CashTable;
+
 
 

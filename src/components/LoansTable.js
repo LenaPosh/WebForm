@@ -8,7 +8,12 @@ const LoansTable = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://conexuscrypto.co.za/api/loans')
+        const token = localStorage.getItem('token');
+        axios.get('https://conexuscrypto.co.za/api/loans', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 setData(response.data.data);
                 setLoading(false);

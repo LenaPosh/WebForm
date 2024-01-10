@@ -35,20 +35,40 @@ const DealForm = () => {
 
 
     useEffect(() => {
-        axios.get('https://conexuscrypto.co.za/api/clients')
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("Пользователь не аутентифицирован, запросы к API блокированы");
+            return;
+        }
+        axios.get('https://conexuscrypto.co.za/api/clients', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setClients(response.data.data))
             .catch(error => console.error('Error fetching clients:', error));
 
-        axios.get('https://conexuscrypto.co.za/api/currencies')
+        axios.get('https://conexuscrypto.co.za/api/currencies', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setCurrencies(response.data.data))
             .catch(error => console.error('Error fetching currencies:', error));
 
-        axios.get('https://conexuscrypto.co.za/api/deals')
+        axios.get('https://conexuscrypto.co.za/api/deals', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setDeals(response.data.data))
             .catch(error => console.error('Error fetching deals:', error));
 
-        // Получите список операторов (пользователей) и сохраните его в состоянии
-        axios.get('https://conexuscrypto.co.za/api/operators')
+        axios.get('https://conexuscrypto.co.za/api/operators', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => setOperators(response.data.data))
             .catch(error => console.error('Error fetching operators:', error));
     }, []);
@@ -66,8 +86,17 @@ const DealForm = () => {
 
     const fetchCurrencyRate = (currency1Id, currency2Id, setRateFunction, rateType) => {
         console.log(`Fetching ${rateType} Rate:`, currency1Id, currency2Id);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.log("Пользователь не аутентифицирован, запросы к API блокированы");
+            return;
+        }
         if (currency1Id && currency2Id) {
-            axios.get(`https://conexuscrypto.co.za/api/exchange_rates/${currency1Id}/${currency2Id}`)
+            axios.get(`https://conexuscrypto.co.za/api/exchange_rates/${currency1Id}/${currency2Id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
                     console.log("Response data:", response.data);
                     if (response.data && response.data.data) {
@@ -114,8 +143,6 @@ const DealForm = () => {
     };
 
 
-
-
     const handleCurrency1Change = (selectedOption) => {
         const currency1Id = selectedOption ? currencies.find(c => c.short_name === selectedOption.value)?.id : null;
         console.log('Currency 1 ID:', currency1Id);
@@ -139,9 +166,6 @@ const DealForm = () => {
             fetchXERate(currency1, currency2Id);
         }
     };
-
-
-
 
 
     useEffect(() => {
@@ -278,9 +302,16 @@ const DealForm = () => {
 
             console.log('Sending deal data:', newDeal);
 
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log("Пользователь не аутентифицирован, запросы к API блокированы");
+                return;
+            }
             axios.post('https://conexuscrypto.co.za/api/deal', newDeal, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+
                 }
             })
                 .then(response => {

@@ -8,7 +8,18 @@ const BalancesTable = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://conexuscrypto.co.za/api/balances')
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found, redirecting to login...');
+            setError('Please log in to view this page.');
+            setLoading(false);
+            return;
+        }
+        axios.get('https://conexuscrypto.co.za/api/balances', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 setData(response.data.data);
                 setLoading(false);
@@ -19,6 +30,7 @@ const BalancesTable = () => {
                 setLoading(false);
             });
     }, []);
+
 
     if (loading) {
         return <p>Загрузка данных...</p>;

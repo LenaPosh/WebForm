@@ -13,7 +13,12 @@ const TableWithForm = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(() => {
-        axios.get('https://conexuscrypto.co.za/api/clients')
+        const token = localStorage.getItem('token');
+        axios.get('https://conexuscrypto.co.za/api/clients', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => {
                 console.log('Data from server:', response.data.data);
                 const formattedData = response.data.data.map(item => ({
@@ -37,9 +42,13 @@ const TableWithForm = () => {
     const handleSave = async (id) => {
         const editedItem = data.find(item => item.id === id);
         if (!editedItem) return;
-
+        const token = localStorage.getItem('token');
         try {
-            await axios.put(`https://conexuscrypto.co.za/api/client/${id}`, editedItem);
+            await axios.put(`https://conexuscrypto.co.za/api/client/${id}`, editedItem, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             setEditingRowId(null);
             console.log('Изменения успешно сохранены');
         } catch (error) {

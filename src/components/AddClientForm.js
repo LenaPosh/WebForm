@@ -42,6 +42,7 @@ const AddClientForm = ({ onSave, onCancel }) => {
     };
 
     const handleSave = async () => {
+        const token = localStorage.getItem('token');
         try {
             const formattedData = {
                 name: formData.name,
@@ -52,10 +53,10 @@ const AddClientForm = ({ onSave, onCancel }) => {
                 phone: formData.phone
             };
 
-
             await axios.post('https://conexuscrypto.co.za/api/client', formattedData, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 

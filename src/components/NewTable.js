@@ -66,7 +66,6 @@ const Table = () => {
                 }
             })
                 .then(response => {
-                    console.log('Data from server:', response.data);
                     const formattedData = response.data.data.map(item => ({
                         ...item,
                         document: item.document,
