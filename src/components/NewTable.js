@@ -32,12 +32,17 @@ const Table = () => {
     };
 
     const handleSave = async (id) => {
+        const token = localStorage.getItem('token');
         setIsEditing(false);
         const editedItem = data.find(item => item.id === id);
         if (!editedItem) return;
 
         try {
-            await axios.put(`https://conexuscrypto.co.za/api/client/${id}`, editedItem);
+            await axios.put(`https://conexuscrypto.co.za/api/client/${id}`, editedItem, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             setEditingRowId(null);
             console.log('Изменения успешно сохранены');
         } catch (error) {
@@ -47,9 +52,21 @@ const Table = () => {
 
     useEffect(() => {
         const fetchData = () => {
-            axios.get('https://conexuscrypto.co.za/api/clients')
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found, redirecting to login...');
+
+                setError('Please log in to view this page.');
+                setLoading(false);
+                return;
+            }
+            axios.get('https://conexuscrypto.co.za/api/clients', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
-                    console.log('Data from server:', response.data); // Для отладки
+                    console.log('Data from server:', response.data);
                     const formattedData = response.data.data.map(item => ({
                         ...item,
                         document: item.document,
@@ -58,6 +75,15 @@ const Table = () => {
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
+                    if (error.response) {
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.log('Error', error.message);
+                    }
                     setError(error.message);
                 })
                 .finally(() => {
