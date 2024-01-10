@@ -60,7 +60,7 @@ tbody tr:hover {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     max-width: 500px;
-    width: 100%;
+    width: 60%;
 }
 
 @media (max-width: 600px) {
