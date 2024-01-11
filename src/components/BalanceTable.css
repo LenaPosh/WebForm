@@ -66,6 +66,6 @@ tbody tr:hover {
 @media (max-width: 600px) {
 
     .modal-content-cash {
-        width: 80%;
+        width: 60%;
     }
 }

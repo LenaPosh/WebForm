@@ -108,7 +108,7 @@
 
 @media (max-width: 600px) {
     .deal-form-container-2 {
-        max-width: 90%;
+        width: 60%;
         padding: 15px;
         margin: 10px auto;
     }
