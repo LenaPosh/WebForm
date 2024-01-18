@@ -320,6 +320,7 @@ const DealForm = () => {
                 })
                 .catch(error => {
                     console.error('Error adding deal:', error);
+                    setIsModalVisible(false);
                 });
         } else {
             console.error('Client not found');
