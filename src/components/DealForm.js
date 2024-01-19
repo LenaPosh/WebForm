@@ -338,7 +338,16 @@ const DealForm = () => {
         setRateFee('');
     };
 
-
+    useEffect(() => {
+        if (deals.length > 0) {
+            const sortedDeals = [...deals].sort((a, b) => {
+                const dateA = new Date(a.date_deal);
+                const dateB = new Date(b.date_deal);
+                return dateB - dateA;
+            });
+            setDeals(sortedDeals);
+        }
+    }, [deals]);
 
 
 
