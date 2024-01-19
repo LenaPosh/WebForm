@@ -33,6 +33,9 @@ const DealForm = () => {
     const [googleCurrencyRate, setGoogleCurrencyRate] = useState(null);
     const [xeCurrencyRate, setXeCurrencyRate] = useState(null);
 
+    const [googleRate, setGoogleRate] = useState(null);
+    const [xeRate, setXeRate] = useState(null);
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -84,7 +87,7 @@ const DealForm = () => {
         }
     }, [currencies]);
 
-    const fetchCurrencyRate = (currency1Id, currency2Id, setRateFunction, rateType) => {
+    const fetchCurrencyRate = (currency1Id, currency2Id, setRateVisibleFunction, setRateFunction, rateType) => {
         console.log(`Fetching ${rateType} Rate:`, currency1Id, currency2Id);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -98,11 +101,13 @@ const DealForm = () => {
                 }
             })
                 .then(response => {
-                    console.log("Response data:", response.data);
                     if (response.data && response.data.data) {
-                        let rateValue = response.data.data[rateType.toLowerCase()];
-                        if (rateValue !== undefined) {
-                            setRateFunction(`${rateType} Rate: ${rateValue.toFixed(2)}`);
+                        const rates = response.data.data;
+                        const visibleRate = rates[`${rateType.toLowerCase()}_visible`];
+                        const actualRate = rates[rateType.toLowerCase()];
+                        if (visibleRate !== undefined && actualRate !== undefined) {
+                            setRateVisibleFunction(`${rateType} Rate: ${visibleRate.toFixed(2)}`);
+                            setRateFunction(actualRate); // Сохраняем фактический курс для расчетов
                         } else {
                             console.error(`${rateType} data is not available`);
                         }
@@ -120,27 +125,27 @@ const DealForm = () => {
 
 
     const fetchGoogleRate = (currency1Id, currency2Id) => {
-        fetchCurrencyRate(currency1Id, currency2Id, setGoogleCurrencyRate, "Google");
+        fetchCurrencyRate(currency1Id, currency2Id, setGoogleCurrencyRate, setGoogleRate, "Google");
     };
 
     const fetchXERate = (currency1Id, currency2Id) => {
-        fetchCurrencyRate(currency1Id, currency2Id, setXeCurrencyRate, "XE");
+        fetchCurrencyRate(currency1Id, currency2Id, setXeCurrencyRate, setXeRate, "XE");
     };
 
 
+
     const handleGoogleRateClick = () => {
-        if (googleCurrencyRate) {
-            const rateValue = googleCurrencyRate.split(': ')[1];
-            setRate(rateValue);
+        if (googleRate !== null) {
+            setRate(googleRate.toString());
         }
     };
 
     const handleXERateClick = () => {
-        if (xeCurrencyRate) {
-            const rateValue = xeCurrencyRate.split(': ')[1];
-            setRate(rateValue);
+        if (xeRate !== null) {
+            setRate(xeRate.toString());
         }
     };
+
 
 
     const handleCurrency1Change = (selectedOption) => {
@@ -191,7 +196,7 @@ const DealForm = () => {
         const rateValue = parseFloat(rate) || 0;
         const commissionPercent = parseFloat(commission) || 0;
         const commissionValue = rateValue * (commissionPercent / 100);
-        const rateFeeValue = rateValue + commissionValue;
+        const rateFeeValue = rateValue - commissionValue;
         setRateFee(rateFeeValue.toFixed(2));
     }, [rate, commission]);
 
@@ -211,10 +216,11 @@ const DealForm = () => {
 
     useEffect(() => {
         const amountValue = parseFloat(amount) || 0;
-        const totalAmountValue = parseFloat(totalAmount) || 0;
-        const profitValue = amountValue - totalAmountValue;
+        const commissionPercent = parseFloat(commission) || 0;
+        const profitValue = amountValue * commissionPercent / 100;
         setProfit(profitValue.toFixed(2));
-    }, [amount, totalAmount]); // Зависимость от amount и totalAmount для вычисления profit
+    }, [amount, commission]);
+
 
 
 
@@ -274,13 +280,6 @@ const DealForm = () => {
             const operatorID = selectedOperator ? selectedOperator.value : null;
             console.log('Selected currencies:', currency1, currency2);
 
-            // const currencyInId = currencies.find(c => c.short_name === currency1)?.id;
-            // const currencyOutId = currencies.find(c => c.short_name === currency2)?.id;
-            //
-            // if (!currencyInId || !currencyOutId) {
-            //     console.error('Currency IDs not found');
-            //     return;
-            // }
 
             const currentDate = new Date();
             const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')} ${String(currentDate.getHours()).padStart(2, '0')}:${String(currentDate.getMinutes()).padStart(2, '0')}:${String(currentDate.getSeconds()).padStart(2, '0')}`;
@@ -437,10 +436,10 @@ const DealForm = () => {
                         Rate:
                         <input type="text" value={rate} onChange={handleRateChange}/>
                         <button className="button-rate" onClick={handleGoogleRateClick}>
-                            {googleCurrencyRate || 'Google Rate'}
+                            {googleCurrencyRate ? googleCurrencyRate : 'Google Rate'}
                         </button>
                         <button className="button-rate" onClick={handleXERateClick}>
-                            {xeCurrencyRate || 'XE Rate'}
+                            {xeCurrencyRate ? xeCurrencyRate : 'XE Rate'}
                         </button>
                     </label>
 
