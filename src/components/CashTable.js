@@ -25,7 +25,7 @@ const CashTable = () => {
     const [directions, setDirections] = useState([]);
 
     const [isCredit, setIsCredit] = useState(false);
-    const [isCreditReturned, setIsCreditReturned] = useState({});
+
 
     const fetchData = () => {
         const token = localStorage.getItem('token');
@@ -102,6 +102,7 @@ const CashTable = () => {
             users_id: formData.get('userId'),
             currencies_id: formData.get('currencyId'),
             directions_id: formData.get('directionId'),
+            is_loan: isCredit,
             amount: formData.get('amount'),
             comments: formData.get('comments')
         };
@@ -139,13 +140,6 @@ const CashTable = () => {
     if (error) {
         return <p>Error: {error}</p>;
     }
-    const handleCreditReturn = (transactionId) => {
-        const returnDate = formatDate(new Date().toISOString());
-        setIsCreditReturned(prevState => ({ ...prevState, [transactionId]: returnDate }));
-
-        // Здесь код для отправки данных о возврате кредита на сервер
-    };
-
     return (
         <div className="table-container-balance">
             <button onClick={() => setShowForm(true)} style={{ padding: '10px 20px'  }}>
@@ -159,7 +153,6 @@ const CashTable = () => {
                     <th>Currency ID</th>
                     <th>Direction ID</th>
                     <th>Loans</th>
-                    <th>Loans Return</th>
                     <th>Amount</th>
                     <th>Сomments</th>
 
@@ -173,13 +166,6 @@ const CashTable = () => {
                         <td>{item.short_name}</td>
                         <td>{item.direction}</td>
                         <td>{item.isCredit ? 'Yes' : 'No'}</td>
-                        <td>
-                            {item.isCredit && !isCreditReturned[item.id] ? (
-                                <button onClick={() => handleCreditReturn(item.id)}>Return Credit</button>
-                            ) : (
-                                isCreditReturned[item.id]
-                            )}
-                        </td>
                         <td>{item.amount}</td>
                         <td>{item.comments}</td>
                     </tr>

@@ -11,7 +11,6 @@ const DealForm = () => {
     const [commission, setCommission] = useState('');
     const [amount, setAmount] = useState('');
     const [totalAmount, setTotalAmount] = useState('');
-    // const [isCurrency1Selected, setIsCurrency1Selected] = useState(false);
 
     const [clients, setClients] = useState([]);
     const [currencies, setCurrencies] = useState([]);
@@ -35,6 +34,9 @@ const DealForm = () => {
 
     const [googleRate, setGoogleRate] = useState(null);
     const [xeRate, setXeRate] = useState(null);
+
+    const [dollarRate, setDollarRate] = useState(null);
+    const [profitInDollars, setProfitInDollars] = useState('');
 
 
     useEffect(() => {
@@ -122,8 +124,6 @@ const DealForm = () => {
     };
 
 
-
-
     const fetchGoogleRate = (currency1Id, currency2Id) => {
         fetchCurrencyRate(currency1Id, currency2Id, setGoogleCurrencyRate, setGoogleRate, "Google");
     };
@@ -131,7 +131,6 @@ const DealForm = () => {
     const fetchXERate = (currency1Id, currency2Id) => {
         fetchCurrencyRate(currency1Id, currency2Id, setXeCurrencyRate, setXeRate, "XE");
     };
-
 
 
     const handleGoogleRateClick = () => {
@@ -145,7 +144,6 @@ const DealForm = () => {
             setRate(xeRate.toString());
         }
     };
-
 
 
     const handleCurrency1Change = (selectedOption) => {
@@ -201,15 +199,11 @@ const DealForm = () => {
     }, [rate, commission]);
 
 
-
-
     useEffect(() => {
         const amountValue = parseFloat(amount) || 0;
         const rateFeeValue = parseFloat(rateFee) || 0;
-        const feeAmount = amountValue * (rateFeeValue / 100);
-        const totalAmountValue = amountValue - feeAmount;
+        const totalAmountValue = amountValue * rateFeeValue;
         setTotalAmount(totalAmountValue.toFixed(2));
-
     }, [amount, rateFee]);
 
 
@@ -221,7 +215,57 @@ const DealForm = () => {
         setProfit(profitValue.toFixed(2));
     }, [amount, commission]);
 
+    const fetchDollarRate = (currency1Id, currency2Id) => {
+        const token = localStorage.getItem('token');
+        const rateType = 'Dollar';
 
+        if (currency1Id && currency2Id) {
+            axios.get(`https://conexuscrypto.co.za/api/exchange_rates/${currency1Id}/${currency2Id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    console.log(response.data)
+
+                    if (response.data && response.data.data) {
+                        const rates = response.data.data;
+                        console.log('Rates data:', rates);
+                        const actualRate = rates['USD'];
+                        if (actualRate !== undefined) {
+                            console.log(`Dollar rate received: ${actualRate}`); // Выводим полученный курс доллара в консоль
+                            setDollarRate(actualRate);
+                        } else {
+                            console.error(`${rateType} data is not available`);
+                        }
+                    } else {
+                        console.error(`No data available in the response`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error fetching ${rateType} currency rate:`, error);
+                });
+        }
+    };
+
+    useEffect(() => {
+        if (currency1 && currency2) {
+            fetchGoogleRate(currency1, currency2);
+            fetchXERate(currency1, currency2);
+            fetchDollarRate(currency1, currency2);
+        }
+    }, [currency1, currency2]);
+
+
+    useEffect(() => {
+        if (dollarRate && profit) {
+            const profitValue = parseFloat(profit) || 0;
+            const dollarRateValue = parseFloat(dollarRate) || 0;
+            console.log(profit, dollarRate)
+            const profitInDollarsValue = profitValue * dollarRateValue;
+            setProfitInDollars(profitInDollarsValue.toFixed(2));
+        }
+    }, [profit, dollarRate]);
 
 
     const handleCommissionChange = (e) => {
@@ -295,7 +339,8 @@ const DealForm = () => {
                 rate: rate,
                 fee: commission,
                 rate_fee: rateFee,
-                profit: profit,
+                // profit: profit,
+                profit: profitInDollars,
                 comments: comment,
             };
 
@@ -336,6 +381,7 @@ const DealForm = () => {
         setComment('');
         setRate('');
         setRateFee('');
+        setProfitInDollars('');
     };
 
     useEffect(() => {
@@ -476,7 +522,10 @@ const DealForm = () => {
                         Profit:
                         <input type="text" value={profit} onChange={handleProfitChange}/>
                     </label>
-
+                    <label>
+                        Profit, $:
+                        <input type="text" value={profitInDollars} readOnly />
+                    </label>
 
                     <label>
                         Comment:
@@ -510,7 +559,8 @@ const DealForm = () => {
                         <th>Commission</th>
                         <th>Amount</th>
                         <th>Total Amount</th>
-                        <th>Profit</th>
+                        {/*<th>Profit</th>*/}
+                        <th>Profit,$</th>
                         <th>Comment</th>
                     </tr>
                     </thead>
@@ -521,14 +571,15 @@ const DealForm = () => {
                             <td>{deal.client_name + " " + deal.client_last_name}</td>
                             <td>{deal.c1}</td>
                             <td>{deal.c2}</td>
-                            <td>{deal.rate}</td>
-                            <td>{deal.rate_fee}</td>
-                            <td>{deal.fee}</td>
-                            <td>{deal.amountin}</td>
-                            <td>{deal.amountout}</td>
-                            <td>{deal.profit}</td>
+                            <td>{Number(deal.rate).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <td>{Number(deal.rate_fee).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <td>{Number(deal.fee).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <td>{Number(deal.amountin).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <td>{Number(deal.amountout).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+                            <td>{Number(deal.profit).toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
                             <td>{deal.comments}</td>
                         </tr>
+
                     ))}
                     </tbody>
                 </table>

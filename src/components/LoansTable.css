@@ -4,8 +4,8 @@
     overflow-x: auto;
     font-family: Arial, sans-serif;
     background-color: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый фон */
-    padding: 20px; /* Добавляем отступы для контейнера */
-    border-radius: 10px; /* Добавляем скругление углов */
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .deposit-row {
@@ -15,3 +15,6 @@
 .withdraw-row {
     background-color: rgba(0, 128, 0, 0.53); /* Цвет для строки с выводом средств */
 }
+
+
+
